@@ -235,6 +235,53 @@
   .row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
   @media (max-width: 600px) { .row-2 { grid-template-columns: 1fr; } }
 
+  /* أزرار تنقل المراحل الست */
+  .stages-tabs {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    margin-bottom: 14px;
+  }
+  @media (max-width: 650px) { .stages-tabs { grid-template-columns: repeat(2, 1fr); } }
+  .stage-btn {
+    background: var(--panel-2);
+    color: var(--ink);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 8px 10px;
+    text-align: right;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .stage-btn.active {
+    background: rgba(56, 189, 248, 0.18);
+    border-color: var(--sky);
+    color: #e0f2fe;
+    box-shadow: 0 0 0 1px rgba(56, 189, 248, 0.35);
+  }
+  .stage-btn-title { font-size: 0.82rem; font-weight: 700; }
+  .stage-btn-meta { font-size: 0.75rem; color: var(--gold); }
+
+  .stage-panel {
+    background: rgba(15, 23, 42, 0.75);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 12px;
+    margin-bottom: 12px;
+  }
+  .stage-panel-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 10px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid rgba(148, 163, 184, 0.18);
+  }
+  .stage-panel-head strong { color: var(--sky); font-size: 0.95rem; }
+
   .score-box {
     background: var(--gold-soft);
     border: 1px solid rgba(245, 158, 11, 0.35);
@@ -244,19 +291,50 @@
   }
   .score-num { font-size: 1.8rem; font-weight: 800; color: var(--gold); }
   .criteria-item {
+    background: rgba(15, 23, 42, 0.65);
+    border: 1px solid rgba(148, 163, 184, 0.16);
+    border-radius: 10px;
+    padding: 10px;
+    margin-bottom: 8px;
+  }
+  .criteria-top {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 7px 0;
-    border-bottom: 1px dashed rgba(148, 163, 184, 0.2);
     gap: 10px;
-    font-size: 0.9rem;
+    font-size: 0.88rem;
+    margin-bottom: 6px;
   }
-  .criteria-item input { width: 76px; text-align: center; }
-  .criteria-item input:disabled {
+  .criteria-top input { width: 76px; text-align: center; padding: 5px 8px; }
+  .criteria-top input:disabled {
     opacity: 0.88;
     cursor: default;
     background: rgba(15, 23, 42, 0.7);
+  }
+  .criteria-note-input {
+    width: 100%;
+    font-size: 0.82rem;
+    padding: 6px 9px;
+  }
+  .criteria-note-input:disabled {
+    opacity: 0.82;
+    cursor: default;
+    background: rgba(15, 23, 42, 0.7);
+  }
+
+  .stages-overview-list {
+    margin-top: 12px;
+    border-top: 1px solid var(--border);
+    padding-top: 10px;
+  }
+  .stage-summary-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.83rem;
+    padding: 5px 0;
+    border-bottom: 1px dashed rgba(148, 163, 184, 0.16);
+    gap: 8px;
   }
 
   /* Modal */
@@ -322,7 +400,7 @@
 <header>
   <div class="brand">
     <h1>بوابة المشروعات البحثية — توجيه الحاسب وتكنولوجيا المعلومات</h1>
-    <p>الصف الثاني الثانوي (بكالوريا) • المراحل الست والتقييم (15 درجة)</p>
+    <p>الصف الثاني الثانوي (بكالوريا) • المراحل الست و15 معيارًا (15 درجة)</p>
   </div>
   <div class="toolbar" id="teacherToolbar">
     <button class="btn-gold" id="toggleModeBtn" onclick="toggleTeacherMode()">تفعيل وضع المعلم المشرف</button>
@@ -450,11 +528,31 @@
       </div>
 
       <div class="card">
-        <h2>توثيق المراحل الست وإقرار الذكاء الاصطناعي</h2>
-        <div class="field">
-          <label>ملخص المراحل الست (الخطة، جمع المادة، التنفيذ، التحليل والنتائج، المنتج النهائي، العرض والتأمل)</label>
-          <textarea rows="4" id="fieldStages" oninput="updateCurrentField('stagesNotes', this.value)"></textarea>
+        <h2>المراحل الست وإقرار الذكاء الاصطناعي لكل باحث</h2>
+
+        <!-- أزرار التنقل بين المراحل الست -->
+        <div class="stages-tabs" id="stagesTabs"></div>
+
+        <!-- كتابة وتوثيق المرحلة النشطة -->
+        <div class="stage-panel">
+          <div class="stage-panel-head">
+            <strong id="activeStageHeading">المرحلة 1</strong>
+            <div style="display:flex; gap:6px;">
+              <button type="button" id="btnPrevStage" onclick="navigateStage(-1)" style="padding:4px 9px; font-size:0.8rem;">◀ مرحلة سابقة</button>
+              <button type="button" id="btnNextStage" onclick="navigateStage(1)" style="padding:4px 9px; font-size:0.8rem;">مرحلة تالية ▶</button>
+            </div>
+          </div>
+          <div class="field" style="margin-bottom:0;">
+            <label id="activeStageNotesLabel">الكتابة والتوثيق الخاص بالمرحلة</label>
+            <textarea
+              rows="3"
+              id="fieldActiveStageNotes"
+              placeholder="اكتب توثيق ومخرجات هذه المرحلة للباحث الحالي..."
+              oninput="updateActiveStageNotes(this.value)"
+            ></textarea>
+          </div>
         </div>
+
         <div class="row-2">
           <div class="field">
             <label>نسبة مشاركة الذكاء الاصطناعي (%)</label>
@@ -465,18 +563,24 @@
             <input type="text" id="fieldAiDisclosure" oninput="updateCurrentField('aiDisclosure', this.value)" />
           </div>
         </div>
+
+        <div class="stages-overview-list">
+          <div style="font-size:0.85rem; color:var(--muted); margin-bottom:6px; font-weight:700;">ملخص درجات المراحل الست للباحث الحالي:</div>
+          <div id="stagesSummaryRows"></div>
+        </div>
       </div>
     </div>
 
     <div>
       <div class="card" id="evaluationCard">
-        <h2>تقييم المشروع البحثي (من 15 درجة)</h2>
+        <h2 id="evaluationCardTitle">تقييم المرحلة ومعاييرها (من 15 درجة إجمالية)</h2>
         <div id="studentGradesNotice" class="hint-text" style="display:none; margin-bottom:10px; color:#7dd3fc;">
           عرض الدرجات متاح للطالب لمعرفة نتيجته فقط؛ التعديل ووضع الدرجات مخصص للمعلم المشرف.
         </div>
         <div class="score-box" style="margin-bottom:14px;">
-          <div style="color:var(--muted); font-size:0.85rem;">الدرجة الإجمالية للطالب</div>
+          <div style="color:var(--muted); font-size:0.85rem;">الدرجة الإجمالية للطالب (15 معيارًا)</div>
           <div class="score-num" id="totalScoreDisplay">0 / 15</div>
+          <div id="activeStageScoreBadge" style="font-size:0.82rem; color:var(--sky); margin-top:4px; font-weight:700;"></div>
         </div>
         <div id="criteriaList"></div>
       </div>
@@ -556,16 +660,72 @@
 
 <script>
 const DEFAULT_PIN = "3247";
-const STORAGE_KEY = "damnhour_research_portal_v8";
+const STORAGE_KEY = "damnhour_research_portal_v9_stages15";
 
-const CRITERIA_DEFS = [
-  { id: "plan", label: "1. وضوح خطة البحث والسؤال الفرعي", max: 2.5 },
-  { id: "research", label: "2. جمع المادة العلمية ودقة المصادر", max: 2.5 },
-  { id: "execution", label: "3. تنفيذ المشروع وتكامل المراحل الست", max: 2.5 },
-  { id: "web", label: "4. جودة موقع الويب التفاعلي والمنتج", max: 2.5 },
-  { id: "analysis", label: "5. التحليل واستخراج النتائج والتوصيات", max: 2.5 },
-  { id: "ethics", label: "6. الأمانة العلمية وإقرار الذكاء الاصطناعي والعرض", max: 2.5 }
+// المراحل الست والمعايير الـ 15 الموزعة عليها (15 معيارًا × 1 درجة = 15 درجة)
+const STAGES_SPEC = [
+  {
+    id: 1,
+    shortName: "خطة البحث والسؤال",
+    title: "المرحلة 1: خطة البحث والسؤال",
+    criteria: [
+      { id: "c01", label: "معيار 1: وضوح فكرة البحث وملاءمتها للمجال", max: 1 },
+      { id: "c02", label: "معيار 2: صياغة السؤال البحثي الرئيسي والفرعية بدقة", max: 1 },
+      { id: "c03", label: "معيار 3: تحديد خطة العمل والجدول الزمني للمراحل", max: 1 }
+    ]
+  },
+  {
+    id: 2,
+    shortName: "جمع المادة والمصادر",
+    title: "المرحلة 2: جمع المادة والمصادر",
+    criteria: [
+      { id: "c04", label: "معيار 4: تنوع المصادر العلمية وموثوقيتها", max: 1 },
+      { id: "c05", label: "معيار 5: دقة تلخيص المعلومات وربطها بموضوع البحث", max: 1 },
+      { id: "c06", label: "معيار 6: توثيق المراجع والاقتباسات بأسلوب صحيح", max: 1 }
+    ]
+  },
+  {
+    id: 3,
+    shortName: "التصميم والتنفيذ",
+    title: "المرحلة 3: التصميم والتنفيذ",
+    criteria: [
+      { id: "c07", label: "معيار 7: تطبيق خطوات التنفيذ العملي وفق الخطة", max: 1 },
+      { id: "c08", label: "معيار 8: تكامل المراحل الست وترابط مخرجاتها", max: 1 }
+    ]
+  },
+  {
+    id: 4,
+    shortName: "موقع الويب والمنتج",
+    title: "المرحلة 4: موقع الويب والمنتج",
+    criteria: [
+      { id: "c09", label: "معيار 9: جودة تصميم موقع الويب أو المنتج وتنظيم واجهته", max: 1 },
+      { id: "c10", label: "معيار 10: فاعلية العناصر التفاعلية وسهولة الاستخدام", max: 1 }
+    ]
+  },
+  {
+    id: 5,
+    shortName: "التحليل والنتائج",
+    title: "المرحلة 5: التحليل والنتائج",
+    criteria: [
+      { id: "c11", label: "معيار 11: صحة تحليل البيانات واستخلاص النتائج المنطقية", max: 1 },
+      { id: "c12", label: "معيار 12: واقعية التوصيات وقابليتها للتطبيق", max: 1 }
+    ]
+  },
+  {
+    id: 6,
+    shortName: "الأمانة والذكاء والعرض",
+    title: "المرحلة 6: الأمانة والذكاء الاصطناعي والعرض",
+    criteria: [
+      { id: "c13", label: "معيار 13: الالتزام بالأمانة العلمية وحقوق الملكية", max: 1 },
+      { id: "c14", label: "معيار 14: شفافية إقرار استخدام أدوات الذكاء الاصطناعي", max: 1 },
+      { id: "c15", label: "معيار 15: جودة العرض النهائي والقدرة على المناقشة والإقناع", max: 1 }
+    ]
+  }
 ];
+
+const ALL_CRITERIA = STAGES_SPEC.flatMap(st =>
+  st.criteria.map(cr => ({ ...cr, stageId: st.id, stageTitle: st.title }))
+);
 
 async function sha256Hex(text) {
   const clean = (text ?? "").toString();
@@ -591,11 +751,126 @@ function createDefaultSecurity() {
   };
 }
 
-function createEmptyScores() {
-  return { plan: 0, research: 0, execution: 0, web: 0, analysis: 0, ethics: 0 };
+function createEmptyStagesData(legacyNotes = "", legacyScores = null) {
+  const stages = {};
+  STAGES_SPEC.forEach((st, idx) => {
+    const criteria = {};
+    st.criteria.forEach((cr, cIdx) => {
+      let initialScore = 0;
+      if (legacyScores && typeof legacyScores === "object") {
+        // دعم استيراد قديم إذا وُجدت درجات سابقة
+        const vals = Object.values(legacyScores).map(v => Number(v) || 0);
+        if (vals.length) {
+          const flatIndex = STAGES_SPEC.slice(0, idx).reduce((acc, s) => acc + s.criteria.length, 0) + cIdx;
+          const mapped = vals[flatIndex % vals.length];
+          initialScore = Math.min(cr.max, Math.max(0, Math.round((mapped / 2.5) * 4) / 4));
+        }
+      }
+      criteria[cr.id] = { score: initialScore, note: "" };
+    });
+    stages[st.id] = {
+      notes: idx === 0 ? (legacyNotes || "") : "",
+      criteria
+    };
+  });
+  return stages;
+}
+
+function ensureRecordStagesStructure(rec) {
+  if (!rec) return null;
+  if (!rec.stages || typeof rec.stages !== "object") {
+    rec.stages = createEmptyStagesData(rec.stagesNotes || "", rec.scores || null);
+  } else {
+    STAGES_SPEC.forEach((st, idx) => {
+      if (!rec.stages[st.id]) {
+        rec.stages[st.id] = {
+          notes: idx === 0 ? (rec.stagesNotes || "") : "",
+          criteria: {}
+        };
+      }
+      if (typeof rec.stages[st.id].notes !== "string") {
+        rec.stages[st.id].notes = "";
+      }
+      if (!rec.stages[st.id].criteria || typeof rec.stages[st.id].criteria !== "object") {
+        rec.stages[st.id].criteria = {};
+      }
+      st.criteria.forEach(cr => {
+        if (!rec.stages[st.id].criteria[cr.id]) {
+          rec.stages[st.id].criteria[cr.id] = { score: 0, note: "" };
+        } else {
+          const item = rec.stages[st.id].criteria[cr.id];
+          const num = Number(item.score);
+          item.score = Number.isFinite(num) ? Math.min(cr.max, Math.max(0, num)) : 0;
+          if (typeof item.note !== "string") item.note = "";
+        }
+      });
+    });
+  }
+  rec.stagesNotes = STAGES_SPEC.map(st => {
+    const n = (rec.stages[st.id]?.notes || "").trim();
+    return n ? `[${st.title}]: ${n}` : "";
+  }).filter(Boolean).join("\n");
+  return rec;
 }
 
 function createDefaultState() {
+  const rec1 = {
+    id: "rec-1",
+    group: "المجموعة رقم (1)",
+    school: "مدرسة إسماعيل الحبروك الرسمية لغات",
+    student: "ياسر محمد محمد أحمد",
+    className: "2/2 ثانوي (بكالوريا)",
+    topic: "أثر الألعاب البرمجية التفاعلية في سرعة استيعاب المفاهيم البرمجية",
+    url: "https://example.edu.eg/group1/yasser",
+    aiPct: 15,
+    aiDisclosure: "استُخدم الذكاء الاصطناعي في تنظيم الأفكار ومراجعة الصياغة اللغوية فقط.",
+    stages: createEmptyStagesData("تم إعداد خطة البحث وتجميع الدراسات وتصميم نموذج تفاعلي للمراحل الست.")
+  };
+  rec1.stages[1].criteria.c01.score = 1;
+  rec1.stages[1].criteria.c02.score = 1;
+  rec1.stages[1].criteria.c03.score = 0.75;
+  rec1.stages[2].criteria.c04.score = 1;
+  rec1.stages[2].criteria.c05.score = 0.75;
+  rec1.stages[2].criteria.c06.score = 0.75;
+  rec1.stages[3].criteria.c07.score = 1;
+  rec1.stages[3].criteria.c08.score = 1;
+  rec1.stages[4].criteria.c09.score = 1;
+  rec1.stages[4].criteria.c10.score = 1;
+  rec1.stages[5].criteria.c11.score = 1;
+  rec1.stages[5].criteria.c12.score = 0.75;
+  rec1.stages[6].criteria.c13.score = 1;
+  rec1.stages[6].criteria.c14.score = 1;
+  rec1.stages[6].criteria.c15.score = 0.75;
+  ensureRecordStagesStructure(rec1);
+
+  const rec2 = {
+    id: "rec-2",
+    group: "المجموعة رقم (1)",
+    school: "مدرسة إسماعيل الحبروك الرسمية لغات",
+    student: "نور محمد عبد الرازق محمود زيدان",
+    className: "2/2 ثانوي (بكالوريا)",
+    topic: "دور التغذية الراجعة الفورية في تحسين منطق الخوارزميات لدى الطلاب",
+    url: "https://example.edu.eg/group1/nour",
+    aiPct: 10,
+    aiDisclosure: "إقرار كامل بشفافية استخدام الأدوات المساعدة مع المراجعة اليدوية الكاملة.",
+    stages: createEmptyStagesData("تم جمع البيانات الميدانية وتحليل نتائج التجربة وبناء صفحة التوثيق.")
+  };
+  ensureRecordStagesStructure(rec2);
+
+  const rec3 = {
+    id: "rec-3",
+    group: "المجموعة رقم (2)",
+    school: "مدرسة إسماعيل الحبروك الرسمية لغات",
+    student: "سلمى محمود حسن عبد العال",
+    className: "2/1 ثانوي (بكالوريا)",
+    topic: "توظيف الذكاء الاصطناعي التوليدي في دعم التعلم الذاتي للبرمجة",
+    url: "https://example.edu.eg/group2/salma",
+    aiPct: 20,
+    aiDisclosure: "إفصاح واضح عن حدود الاستعانة بالذكاء الاصطناعي وتوثيق المصادر.",
+    stages: createEmptyStagesData("استكمال المراحل الأولى والثانية والثالثة وتجهيز عرض النتائج.")
+  };
+  ensureRecordStagesStructure(rec3);
+
   return {
     security: createDefaultSecurity(),
     schools: [
@@ -606,49 +881,10 @@ function createDefaultState() {
       "مدرسة إسماعيل الحبروك الرسمية لغات": ["المجموعة رقم (1)", "المجموعة رقم (2)"],
       "مدرسة دمنهور الثانوية العسكرية": []
     },
-    records: [
-      {
-        id: "rec-1",
-        group: "المجموعة رقم (1)",
-        school: "مدرسة إسماعيل الحبروك الرسمية لغات",
-        student: "ياسر محمد محمد أحمد",
-        className: "2/2 ثانوي (بكالوريا)",
-        topic: "أثر الألعاب البرمجية التفاعلية في سرعة استيعاب المفاهيم البرمجية",
-        url: "https://example.edu.eg/group1/yasser",
-        stagesNotes: "تم إعداد خطة البحث وتجميع الدراسات وتصميم نموذج تفاعلي للمراحل الست.",
-        aiPct: 15,
-        aiDisclosure: "استُخدم الذكاء الاصطناعي في تنظيم الأفكار ومراجعة الصياغة اللغوية فقط.",
-        scores: { plan: 2.5, research: 2.0, execution: 2.5, web: 2.5, analysis: 2.0, ethics: 2.5 }
-      },
-      {
-        id: "rec-2",
-        group: "المجموعة رقم (1)",
-        school: "مدرسة إسماعيل الحبروك الرسمية لغات",
-        student: "نور محمد عبد الرازق محمود زيدان",
-        className: "2/2 ثانوي (بكالوريا)",
-        topic: "دور التغذية الراجعة الفورية في تحسين منطق الخوارزميات لدى الطلاب",
-        url: "https://example.edu.eg/group1/nour",
-        stagesNotes: "تم جمع البيانات الميدانية وتحليل نتائج التجربة وبناء صفحة التوثيق.",
-        aiPct: 10,
-        aiDisclosure: "إقرار كامل بشفافية استخدام الأدوات المساعدة مع المراجعة اليدوية الكاملة.",
-        scores: { plan: 2.5, research: 2.5, execution: 2.0, web: 2.0, analysis: 2.5, ethics: 2.5 }
-      },
-      {
-        id: "rec-3",
-        group: "المجموعة رقم (2)",
-        school: "مدرسة إسماعيل الحبروك الرسمية لغات",
-        student: "سلمى محمود حسن عبد العال",
-        className: "2/1 ثانوي (بكالوريا)",
-        topic: "توظيف الذكاء الاصطناعي التوليدي في دعم التعلم الذاتي للبرمجة",
-        url: "https://example.edu.eg/group2/salma",
-        stagesNotes: "استكمال المراحل الأولى والثانية والثالثة وتجهيز عرض النتائج.",
-        aiPct: 20,
-        aiDisclosure: "إفصاح واضح عن حدود الاستعانة بالذكاء الاصطناعي وتوثيق المصادر.",
-        scores: { plan: 2.0, research: 2.0, execution: 2.0, web: 2.0, analysis: 2.0, ethics: 2.0 }
-      }
-    ],
+    records: [rec1, rec2, rec3],
     activeSchool: "مدرسة إسماعيل الحبروك الرسمية لغات",
     activeGroup: "المجموعة رقم (1)",
+    activeStageId: 1,
     currentId: "rec-1"
   };
 }
@@ -706,13 +942,18 @@ function loadState() {
         const activeSchool = parsed.activeSchool && schools.includes(parsed.activeSchool)
           ? parsed.activeSchool
           : schools[0];
+        const records = parsed.records.map(r => ensureRecordStagesStructure(r));
+        const activeStageId = STAGES_SPEC.some(s => s.id === Number(parsed.activeStageId))
+          ? Number(parsed.activeStageId)
+          : 1;
         return {
           security,
           schools,
           schoolGroupsMap,
-          records: parsed.records,
+          records,
           activeSchool,
           activeGroup: parsed.activeGroup || "",
+          activeStageId,
           currentId: parsed.currentId || null
         };
       }
@@ -777,15 +1018,82 @@ function getCurrentRecord() {
   const groupStudents = getGroupStudentsInSchool(state.activeSchool, state.activeGroup);
   if (groupStudents.length === 0) return null;
   const found = groupStudents.find(r => r.id === state.currentId);
-  if (found) return found;
+  if (found) return ensureRecordStagesStructure(found);
   state.currentId = groupStudents[0].id;
-  return groupStudents[0];
+  return ensureRecordStagesStructure(groupStudents[0]);
+}
+
+function getActiveStageSpec() {
+  return STAGES_SPEC.find(s => s.id === state.activeStageId) || STAGES_SPEC[0];
+}
+
+function computeStageScore(rec, stageId) {
+  if (!rec) return 0;
+  ensureRecordStagesStructure(rec);
+  const stSpec = STAGES_SPEC.find(s => s.id === stageId);
+  if (!stSpec) return 0;
+  const stData = rec.stages[stageId] || { criteria: {} };
+  const sum = stSpec.criteria.reduce((acc, cr) => {
+    const val = Number(stData.criteria?.[cr.id]?.score ?? 0);
+    return acc + (Number.isFinite(val) ? Math.min(cr.max, Math.max(0, val)) : 0);
+  }, 0);
+  return Math.round(sum * 100) / 100;
+}
+
+function computeStageMaxScore(stageId) {
+  const stSpec = STAGES_SPEC.find(s => s.id === stageId);
+  return stSpec ? stSpec.criteria.reduce((acc, cr) => acc + cr.max, 0) : 0;
 }
 
 function computeTotalScore(rec) {
-  if (!rec || !rec.scores) return 0;
-  const sum = CRITERIA_DEFS.reduce((acc, c) => acc + (Number(rec.scores[c.id]) || 0), 0);
-  return Math.min(15, Math.round(sum * 10) / 10);
+  if (!rec) return 0;
+  ensureRecordStagesStructure(rec);
+  const sum = STAGES_SPEC.reduce((acc, st) => acc + computeStageScore(rec, st.id), 0);
+  return Math.min(15, Math.round(sum * 100) / 100);
+}
+
+function selectStage(stageId) {
+  const targetId = Number(stageId);
+  if (!STAGES_SPEC.some(s => s.id === targetId)) return;
+  state.activeStageId = targetId;
+  persistToStorage(false);
+  renderAll();
+}
+
+function navigateStage(delta) {
+  const currentIdx = STAGES_SPEC.findIndex(s => s.id === state.activeStageId);
+  const nextIdx = Math.max(0, Math.min(STAGES_SPEC.length - 1, currentIdx + delta));
+  selectStage(STAGES_SPEC[nextIdx].id);
+}
+
+function updateActiveStageNotes(val) {
+  if (!isTeacherMode) {
+    showToast("التعديل متاح للمعلم المشرف فقط");
+    renderAll();
+    return;
+  }
+  const rec = getCurrentRecord();
+  if (!rec) return;
+  const stSpec = getActiveStageSpec();
+  rec.stages[stSpec.id].notes = val;
+  ensureRecordStagesStructure(rec);
+  persistToStorage(false);
+}
+
+function updateCriterionNote(stageId, criterionId, val) {
+  if (!isTeacherMode) {
+    showToast("التعديل متاح للمعلم المشرف فقط");
+    renderAll();
+    return;
+  }
+  const rec = getCurrentRecord();
+  if (!rec) return;
+  ensureRecordStagesStructure(rec);
+  if (!rec.stages[stageId].criteria[criterionId]) {
+    rec.stages[stageId].criteria[criterionId] = { score: 0, note: "" };
+  }
+  rec.stages[stageId].criteria[criterionId].note = val;
+  persistToStorage(false);
 }
 
 async function verifyPinInput(enteredPin) {
@@ -838,7 +1146,7 @@ function syncSecurityStrip() {
   if (!isTeacherMode) {
     pill.textContent = "وضع الطالب: تنقل وبحث ومعرفة الدرجات فقط";
     summary.textContent = "الإضافة والحذف والتعديل ووضع الدرجات متاحة للمعلم المشرف فقط.";
-    quick.textContent = "يمكنك التنقل بين المدارس والمجموعات والطلاب والبحث بالاسم.";
+    quick.textContent = "يمكنك التنقل بين المدارس والمجموعات والطلاب والمراحل الست والبحث بالاسم.";
     return;
   }
 
@@ -898,7 +1206,7 @@ function syncModeUI() {
 
   const editableIds = [
     "fieldGroup", "fieldStudent", "fieldClass",
-    "fieldTopic", "fieldUrl", "fieldStages", "fieldAiPct", "fieldAiDisclosure"
+    "fieldTopic", "fieldUrl", "fieldActiveStageNotes", "fieldAiPct", "fieldAiDisclosure"
   ];
   editableIds.forEach(id => {
     const el = document.getElementById(id);
@@ -910,7 +1218,7 @@ function syncModeUI() {
     fieldSchoolSel.disabled = !isTeacherMode;
   }
 
-  document.querySelectorAll(".score-input").forEach(inp => {
+  document.querySelectorAll(".score-input, .criteria-note-input").forEach(inp => {
     inp.disabled = !isTeacherMode || !hasRecord;
   });
   syncSecurityStrip();
@@ -1137,6 +1445,7 @@ function renderAll() {
 
   const groupStudents = getGroupStudentsInSchool(state.activeSchool, state.activeGroup);
   const currentRec = getCurrentRecord();
+  const activeStage = getActiveStageSpec();
 
   if (currentRec) {
     document.getElementById("fieldGroup").value = currentRec.group || "";
@@ -1144,7 +1453,7 @@ function renderAll() {
     document.getElementById("fieldClass").value = currentRec.className || "";
     document.getElementById("fieldTopic").value = currentRec.topic || "";
     document.getElementById("fieldUrl").value = currentRec.url || "";
-    document.getElementById("fieldStages").value = currentRec.stagesNotes || "";
+    document.getElementById("fieldActiveStageNotes").value = currentRec.stages[activeStage.id]?.notes || "";
     document.getElementById("fieldAiPct").value = currentRec.aiPct ?? 0;
     document.getElementById("fieldAiDisclosure").value = currentRec.aiDisclosure || "";
   } else {
@@ -1153,19 +1462,55 @@ function renderAll() {
     document.getElementById("fieldClass").value = "";
     document.getElementById("fieldTopic").value = "";
     document.getElementById("fieldUrl").value = "";
-    document.getElementById("fieldStages").value = "";
+    document.getElementById("fieldActiveStageNotes").value = "";
     document.getElementById("fieldAiPct").value = 0;
     document.getElementById("fieldAiDisclosure").value = "";
   }
 
+  renderStagesUI(currentRec, activeStage);
   renderGroupStudentsStrip(groupStudents, currentRec);
-  renderCriteria(currentRec);
+  renderCriteria(currentRec, activeStage);
   updateGroupNavigationUI(groupStudents, currentRec);
 
   const schoolTotalStudents = getSchoolRecords(state.activeSchool).length;
   document.getElementById("countsSummary").textContent =
     `طلاب المدرسة: ${schoolTotalStudents} • مجموعات المدرسة: ${schoolGroups.length} • إجمالي السجلات بالنظام: ${state.records.length}`;
   syncModeUI();
+}
+
+function renderStagesUI(rec, activeStage) {
+  const tabsEl = document.getElementById("stagesTabs");
+  tabsEl.innerHTML = STAGES_SPEC.map(st => {
+    const isAct = st.id === activeStage.id;
+    const stScore = rec ? computeStageScore(rec, st.id) : 0;
+    const stMax = computeStageMaxScore(st.id);
+    return `
+      <button type="button" class="stage-btn ${isAct ? "active" : ""}" onclick="selectStage(${st.id})">
+        <span class="stage-btn-title">${st.id}. ${escapeHtml(st.shortName)}</span>
+        <span class="stage-btn-meta">${stScore} / ${stMax} (${st.criteria.length} معايير)</span>
+      </button>
+    `;
+  }).join("");
+
+  document.getElementById("activeStageHeading").textContent = activeStage.title;
+  document.getElementById("activeStageNotesLabel").textContent = `الكتابة والتوثيق الخاص بـ (${activeStage.title})`;
+
+  const idx = STAGES_SPEC.findIndex(s => s.id === activeStage.id);
+  document.getElementById("btnPrevStage").disabled = idx <= 0;
+  document.getElementById("btnNextStage").disabled = idx >= STAGES_SPEC.length - 1;
+
+  const summaryRowsEl = document.getElementById("stagesSummaryRows");
+  summaryRowsEl.innerHTML = STAGES_SPEC.map(st => {
+    const sc = rec ? computeStageScore(rec, st.id) : 0;
+    const mx = computeStageMaxScore(st.id);
+    const hasTxt = Boolean(rec && (rec.stages[st.id]?.notes || "").trim());
+    return `
+      <div class="stage-summary-row">
+        <span>${escapeHtml(st.title)} ${hasTxt ? '<small style="color:#6ee7b7;">• موثّق</small>' : '<small style="color:var(--muted);">• بدون نص</small>'}</span>
+        <strong style="color:var(--gold);">${sc} / ${mx}</strong>
+      </div>
+    `;
+  }).join("");
 }
 
 function renderGroupStudentsStrip(groupStudents, currentRec) {
@@ -1188,22 +1533,39 @@ function renderGroupStudentsStrip(groupStudents, currentRec) {
   }).join("");
 }
 
-function renderCriteria(rec) {
+function renderCriteria(rec, activeStage) {
   const wrap = document.getElementById("criteriaList");
-  const scores = (rec && rec.scores) || {};
-  wrap.innerHTML = CRITERIA_DEFS.map(c => {
-    const val = rec ? (scores[c.id] ?? 0) : 0;
+  const cardTitle = document.getElementById("evaluationCardTitle");
+  const stageBadge = document.getElementById("activeStageScoreBadge");
+
+  cardTitle.textContent = `معايير ${activeStage.title} (إجمالي 15 معيارًا / 15 درجة)`;
+  const stScore = rec ? computeStageScore(rec, activeStage.id) : 0;
+  const stMax = computeStageMaxScore(activeStage.id);
+  stageBadge.textContent = `درجة ${activeStage.title}: ${stScore} / ${stMax}`;
+
+  const stData = (rec && rec.stages && rec.stages[activeStage.id]) || { criteria: {} };
+  wrap.innerHTML = activeStage.criteria.map(c => {
+    const cObj = (stData.criteria && stData.criteria[c.id]) || { score: 0, note: "" };
     return `
       <div class="criteria-item">
-        <span>${c.label} <small style="color:var(--muted);">(${c.max})</small></span>
+        <div class="criteria-top">
+          <span><strong>${escapeHtml(c.label)}</strong> <small style="color:var(--muted);">(${c.max} درجة)</small></span>
+          <input
+            type="number"
+            class="score-input"
+            step="0.25"
+            min="0"
+            max="${c.max}"
+            value="${cObj.score ?? 0}"
+            onchange="updateScore(${activeStage.id}, '${c.id}', ${c.max}, this.value)"
+          />
+        </div>
         <input
-          type="number"
-          class="score-input"
-          step="0.5"
-          min="0"
-          max="${c.max}"
-          value="${val}"
-          onchange="updateScore('${c.id}', ${c.max}, this.value)"
+          type="text"
+          class="criteria-note-input"
+          placeholder="ملاحظة أو توثيق خاص بهذا المعيار..."
+          value="${escapeHtml(cObj.note || "")}"
+          oninput="updateCriterionNote(${activeStage.id}, '${c.id}', this.value)"
         />
       </div>
     `;
@@ -1211,22 +1573,24 @@ function renderCriteria(rec) {
   document.getElementById("totalScoreDisplay").textContent = `${computeTotalScore(rec)} / 15`;
 }
 
-function updateScore(criterionId, maxScore, rawVal) {
+function updateScore(stageId, criterionId, maxScore, rawVal) {
   if (!isTeacherMode) {
     showToast("وضع الدرجات متاح للمعلم المشرف فقط");
-    renderCriteria(getCurrentRecord());
-    syncModeUI();
+    renderAll();
     return;
   }
   const rec = getCurrentRecord();
   if (!rec) return;
+  ensureRecordStagesStructure(rec);
   let num = parseFloat(rawVal);
   if (isNaN(num)) num = 0;
-  num = Math.max(0, Math.min(maxScore, Math.round(num * 2) / 2));
-  rec.scores = rec.scores || {};
-  rec.scores[criterionId] = num;
-  document.getElementById("totalScoreDisplay").textContent = `${computeTotalScore(rec)} / 15`;
+  num = Math.max(0, Math.min(maxScore, Math.round(num * 4) / 4));
+  if (!rec.stages[stageId].criteria[criterionId]) {
+    rec.stages[stageId].criteria[criterionId] = { score: 0, note: "" };
+  }
+  rec.stages[stageId].criteria[criterionId].score = num;
   persistToStorage(false);
+  renderAll();
 }
 
 function updateGroupNavigationUI(groupStudents, currentRec) {
@@ -1376,11 +1740,11 @@ function addStudentRecord() {
     className: (templateRec && templateRec.className) || "2/2 ثانوي (بكالوريا)",
     topic: "",
     url: "",
-    stagesNotes: "",
     aiPct: 0,
     aiDisclosure: "",
-    scores: createEmptyScores()
+    stages: createEmptyStagesData("")
   };
+  ensureRecordStagesStructure(newRec);
 
   state.records.push(newRec);
   state.activeSchool = targetSchool;
@@ -1487,11 +1851,13 @@ function deleteSchool(idx) {
 
 function saveCurrentState() {
   if (!isTeacherMode) return;
+  state.records.forEach(r => ensureRecordStagesStructure(r));
   persistToStorage(true);
 }
 
 function exportJson() {
   if (!isTeacherMode) return;
+  state.records.forEach(r => ensureRecordStagesStructure(r));
   const blob = new Blob([JSON.stringify(state, null, 2)], { type: "application/json;charset=utf-8" });
   const url = URL.createObjectURL(blob);
   const a = document.createElement("a");
@@ -1529,14 +1895,16 @@ function importJson(event) {
         r => (r.school || "").trim() === activeSchool.trim() && (r.group || "").trim() === activeGroup.trim()
       );
       const currentId = (groupList.find(r => r.id === parsed.currentId) || groupList[0] || {}).id || null;
+      const records = parsed.records.map(r => ensureRecordStagesStructure(r));
 
       state = {
         security: Object.assign(createDefaultSecurity(), parsed.security || {}),
         schools,
         schoolGroupsMap,
-        records: parsed.records,
+        records,
         activeSchool,
         activeGroup,
+        activeStageId: STAGES_SPEC.some(s => s.id === Number(parsed.activeStageId)) ? Number(parsed.activeStageId) : 1,
         currentId
       };
       persistToStorage(true);
@@ -1555,10 +1923,38 @@ function generatePdfReport() {
     showToast("لا توجد بيانات طالب لطباعة تقرير");
     return;
   }
+  ensureRecordStagesStructure(rec);
   const total = computeTotalScore(rec);
-  const rowsHtml = CRITERIA_DEFS.map(c =>
-    `<tr><td>${c.label}</td><td>${(rec.scores && rec.scores[c.id]) ?? 0} / ${c.max}</td></tr>`
-  ).join("");
+
+  const stagesSectionsHtml = STAGES_SPEC.map(st => {
+    const stData = rec.stages[st.id] || { notes: "", criteria: {} };
+    const stScore = computeStageScore(rec, st.id);
+    const stMax = computeStageMaxScore(st.id);
+    const critRows = st.criteria.map(c => {
+      const item = stData.criteria[c.id] || { score: 0, note: "" };
+      return `
+        <tr>
+          <td>${escapeHtml(c.label)}</td>
+          <td>${item.score ?? 0} / ${c.max}</td>
+          <td>${escapeHtml(item.note || "—")}</td>
+        </tr>
+      `;
+    }).join("");
+
+    return `
+      <div class="box">
+        <div style="display:flex; justify-content:space-between; margin-bottom:6px;">
+          <strong>${escapeHtml(st.title)}</strong>
+          <strong>درجة المرحلة: ${stScore} / ${stMax}</strong>
+        </div>
+        <div style="margin-bottom:8px; font-size:13px;"><strong>توثيق المرحلة:</strong> ${escapeHtml(stData.notes || "—")}</div>
+        <table>
+          <thead><tr><th>المعيار</th><th>الدرجة</th><th>ملاحظات المعيار</th></tr></thead>
+          <tbody>${critRows}</tbody>
+        </table>
+      </div>
+    `;
+  }).join("");
 
   const reportHtml = `<!DOCTYPE html>
 <html lang="ar" dir="rtl">
@@ -1569,8 +1965,8 @@ function generatePdfReport() {
   body { font-family: Tahoma, Arial, sans-serif; margin: 28px; color: #111827; }
   h1 { margin: 0 0 6px; font-size: 20px; }
   .meta { color: #4b5563; margin-bottom: 18px; font-size: 13px; }
-  table { width: 100%; border-collapse: collapse; margin: 14px 0; }
-  th, td { border: 1px solid #cbd5e1; padding: 8px 10px; text-align: right; font-size: 13px; }
+  table { width: 100%; border-collapse: collapse; margin: 8px 0 4px; }
+  th, td { border: 1px solid #cbd5e1; padding: 7px 9px; text-align: right; font-size: 12.5px; }
   th { background: #f1f5f9; }
   .box { border: 1px solid #cbd5e1; border-radius: 8px; padding: 12px; margin-bottom: 12px; background: #f8fafc; }
   .total { font-size: 16px; font-weight: bold; color: #0f172a; }
@@ -1578,7 +1974,7 @@ function generatePdfReport() {
 </head>
 <body>
   <h1>تقرير تقييم المشروع البحثي — الصف الثاني الثانوي (بكالوريا)</h1>
-  <div class="meta">مادة الكمبيوتر وتكنولوجيا المعلومات • التقييم الكلي: <span class="total">${total} من 15 درجة</span></div>
+  <div class="meta">مادة الكمبيوتر وتكنولوجيا المعلومات • التقييم الكلي (15 معيارًا): <span class="total">${total} من 15 درجة</span></div>
   <div class="box">
     <strong>الطالب الباحث:</strong> ${escapeHtml(rec.student || "")}<br/>
     <strong>المجموعة البحثية:</strong> ${escapeHtml(rec.group || "")} — <strong>الفصل:</strong> ${escapeHtml(rec.className || "")}<br/>
@@ -1587,15 +1983,9 @@ function generatePdfReport() {
     <strong>رابط الموقع:</strong> ${escapeHtml(rec.url || "")}
   </div>
   <div class="box">
-    <strong>ملخص المراحل الست:</strong><br/>${escapeHtml(rec.stagesNotes || "")}
-  </div>
-  <div class="box">
     <strong>إقرار الذكاء الاصطناعي (${rec.aiPct ?? 0}%):</strong><br/>${escapeHtml(rec.aiDisclosure || "")}
   </div>
-  <table>
-    <thead><tr><th>معيار التقييم</th><th>الدرجة</th></tr></thead>
-    <tbody>${rowsHtml}</tbody>
-  </table>
+  ${stagesSectionsHtml}
   <script>window.print();<\/script>
 </body>
 </html>`;
@@ -1614,11 +2004,11 @@ function generatePdfReport() {
 
 function escapeHtml(str) {
   return (str || "").toString()
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;")
-    .replace(/'/g, "&#39;");
+    .replace(/&/g, "&")
+    .replace(/</g, "<")
+    .replace(/>/g, ">")
+    .replace(/"/g, """)
+    .replace(/'/g, "'");
 }
 
 renderAll();
