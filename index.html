@@ -1,0 +1,1627 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>بوابة المشروعات البحثية — توجيه الحاسب وتكنولوجيا المعلومات</title>
+<style>
+  :root {
+    --bg: #0b1120;
+    --panel: #111827;
+    --panel-2: #1e293b;
+    --ink: #f8fafc;
+    --muted: #94a3b8;
+    --gold: #f59e0b;
+    --gold-soft: rgba(245, 158, 11, 0.14);
+    --emerald: #10b981;
+    --rose: #f43f5e;
+    --sky: #38bdf8;
+    --violet: #a78bfa;
+    --border: #273549;
+    --radius: 14px;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: "Segoe UI", Tahoma, Arial, sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+    line-height: 1.6;
+  }
+  header {
+    background: linear-gradient(135deg, #0f172a 0%, #172554 100%);
+    border-bottom: 1px solid var(--border);
+    padding: 16px 24px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+  }
+  .brand h1 { margin: 0; font-size: 1.25rem; color: var(--gold); }
+  .brand p { margin: 2px 0 0; font-size: 0.85rem; color: var(--muted); }
+  .toolbar { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+  button, select, input, textarea {
+    font-family: inherit;
+    border-radius: 9px;
+    border: 1px solid var(--border);
+    background: var(--panel-2);
+    color: var(--ink);
+    padding: 8px 12px;
+    font-size: 0.9rem;
+  }
+  button { cursor: pointer; transition: 0.15s ease; font-weight: 600; }
+  button:hover:not(:disabled) { filter: brightness(1.12); transform: translateY(-1px); }
+  button:disabled { opacity: 0.4; cursor: not-allowed; }
+  .btn-gold { background: var(--gold); color: #0f172a; border-color: var(--gold); }
+  .btn-emerald { background: rgba(16, 185, 129, 0.18); color: #6ee7b7; border-color: rgba(16, 185, 129, 0.4); }
+  .btn-rose { background: rgba(244, 63, 94, 0.18); color: #fda4af; border-color: rgba(244, 63, 94, 0.4); }
+  .btn-sky { background: rgba(56, 189, 248, 0.18); color: #7dd3fc; border-color: rgba(56, 189, 248, 0.4); }
+  .btn-violet { background: rgba(167, 139, 250, 0.18); color: #ddd6fe; border-color: rgba(167, 139, 250, 0.4); }
+
+  .container { max-width: 1200px; margin: 20px auto; padding: 0 16px 48px; }
+  .status-bar {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 12px 16px;
+    margin-bottom: 18px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    font-size: 0.9rem;
+  }
+  .filter-controls {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    align-items: center;
+  }
+  .filter-group {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+  .badge {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 999px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    background: var(--gold-soft);
+    color: var(--gold);
+  }
+  .security-strip {
+    background: rgba(15, 23, 42, 0.85);
+    border: 1px solid rgba(167, 139, 250, 0.35);
+    border-radius: var(--radius);
+    padding: 10px 16px;
+    margin-bottom: 18px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.85rem;
+    color: var(--muted);
+  }
+  .lock-pill {
+    padding: 3px 10px;
+    border-radius: 999px;
+    font-size: 0.78rem;
+    font-weight: 700;
+    background: rgba(167, 139, 250, 0.16);
+    color: #ddd6fe;
+  }
+  .grid { display: grid; grid-template-columns: 1.15fr 0.85fr; gap: 18px; }
+  @media (max-width: 900px) { .grid { grid-template-columns: 1fr; } }
+
+  .card {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 18px;
+    margin-bottom: 16px;
+  }
+  .card h2 {
+    margin: 0 0 14px;
+    font-size: 1.05rem;
+    color: var(--gold);
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 8px;
+  }
+  .nav-box {
+    background: rgba(15, 23, 42, 0.75);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 12px;
+    margin-bottom: 16px;
+  }
+  .nav-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+  }
+  .nav-row:last-child { margin-bottom: 0; }
+  .nav-buttons { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+  .pos-indicator {
+    font-size: 0.85rem;
+    color: var(--sky);
+    font-weight: 700;
+    padding: 4px 10px;
+    background: rgba(56, 189, 248, 0.12);
+    border-radius: 8px;
+  }
+  .search-wrap { position: relative; flex: 1; min-width: 220px; }
+  .search-wrap input { width: 100%; }
+  .search-results {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    z-index: 40;
+    background: #0f172a;
+    border: 1px solid var(--gold);
+    border-radius: 10px;
+    margin-top: 4px;
+    max-height: 240px;
+    overflow-y: auto;
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.55);
+  }
+  .search-item {
+    padding: 9px 12px;
+    cursor: pointer;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+  }
+  .search-item:last-child { border-bottom: none; }
+  .search-item:hover { background: var(--gold-soft); }
+  .search-empty { padding: 10px 12px; color: var(--muted); font-size: 0.85rem; }
+
+  .group-students-strip {
+    background: rgba(30, 41, 59, 0.65);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 10px 12px;
+    margin-bottom: 14px;
+  }
+  .group-students-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    font-size: 0.85rem;
+    color: var(--muted);
+    margin-bottom: 8px;
+  }
+  .student-pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  .student-pill {
+    padding: 5px 10px;
+    border-radius: 8px;
+    font-size: 0.82rem;
+    border: 1px solid var(--border);
+    background: var(--panel);
+    color: var(--ink);
+  }
+  .student-pill.active {
+    background: var(--gold);
+    color: #0f172a;
+    border-color: var(--gold);
+    font-weight: 700;
+  }
+
+  .field { margin-bottom: 12px; }
+  .field label { display: block; font-size: 0.85rem; color: var(--muted); margin-bottom: 4px; }
+  .field input, .field select, .field textarea { width: 100%; }
+  .field input:disabled, .field select:disabled, .field textarea:disabled {
+    opacity: 0.82;
+    cursor: default;
+    background: rgba(15, 23, 42, 0.7);
+  }
+  .row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  @media (max-width: 600px) { .row-2 { grid-template-columns: 1fr; } }
+
+  .score-box {
+    background: var(--gold-soft);
+    border: 1px solid rgba(245, 158, 11, 0.35);
+    border-radius: 12px;
+    padding: 14px;
+    text-align: center;
+  }
+  .score-num { font-size: 1.8rem; font-weight: 800; color: var(--gold); }
+  .criteria-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 7px 0;
+    border-bottom: 1px dashed rgba(148, 163, 184, 0.2);
+    gap: 10px;
+    font-size: 0.9rem;
+  }
+  .criteria-item input { width: 76px; text-align: center; }
+  .criteria-item input:disabled {
+    opacity: 0.88;
+    cursor: default;
+    background: rgba(15, 23, 42, 0.7);
+  }
+
+  /* Modal */
+  .modal-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(2, 6, 23, 0.78);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 100;
+    padding: 16px;
+  }
+  .modal-backdrop.open { display: flex; }
+  .modal {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    width: 100%;
+    max-width: 580px;
+    padding: 20px;
+    max-height: 88vh;
+    overflow-y: auto;
+  }
+  .modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 10px;
+    margin-bottom: 14px;
+  }
+  .modal-header h3 { margin: 0; color: var(--gold); font-size: 1.05rem; }
+  .school-row {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    margin-bottom: 8px;
+    background: var(--panel-2);
+    padding: 8px;
+    border-radius: 9px;
+  }
+  .school-row input { flex: 1; }
+  .toast {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    background: #0f172a;
+    color: var(--ink);
+    border: 1px solid var(--emerald);
+    padding: 10px 16px;
+    border-radius: 10px;
+    font-size: 0.9rem;
+    z-index: 200;
+    display: none;
+  }
+  .toast.show { display: block; }
+  .hint-text { font-size: 0.8rem; color: var(--muted); margin-top: 6px; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="brand">
+    <h1>بوابة المشروعات البحثية — توجيه الحاسب وتكنولوجيا المعلومات</h1>
+    <p>الصف الثاني الثانوي (بكالوريا) • المراحل الست والتقييم (15 درجة)</p>
+  </div>
+  <div class="toolbar" id="teacherToolbar">
+    <button class="btn-gold" id="toggleModeBtn" onclick="toggleTeacherMode()">تفعيل وضع المعلم المشرف</button>
+    <span id="teacherActions" style="display:none; gap:8px; flex-wrap:wrap;">
+      <button class="btn-violet" id="addGroupBtn" onclick="addGroupToSelectedSchool()">+ إضافة مجموعة للمدرسة</button>
+      <button class="btn-rose" id="deleteGroupBtn" onclick="deleteCurrentGroup()">🗑 حذف المجموعة الحالية</button>
+      <button class="btn-emerald" id="addStudentBtn" onclick="addStudentRecord()">+ إضافة طالب للمجموعة</button>
+      <button class="btn-sky" onclick="openSchoolsModal()">إدارة المدارس الموحدة</button>
+      <button class="btn-violet" onclick="openSecurityModal()">مصادقة ورمز المعلم</button>
+      <button class="btn-gold" onclick="saveCurrentState()">حفظ البيانات الحالية</button>
+      <button onclick="exportJson()">تصدير JSON</button>
+      <button onclick="document.getElementById('importFileInput').click()">استيراد JSON</button>
+      <button class="btn-rose" onclick="deleteCurrentRecord()">حذف السجل الحالي</button>
+      <input type="file" id="importFileInput" accept=".json,application/json" style="display:none" onchange="importJson(event)" />
+    </span>
+    <button class="btn-sky" onclick="generatePdfReport()">طباعة / تقرير PDF</button>
+  </div>
+</header>
+
+<div class="container">
+  <div class="security-strip">
+    <div>
+      <span class="lock-pill" id="authStatusPill">وضع الطالب: عرض وبحث فقط</span>
+      <span id="securitySummaryText" style="margin-right:8px;"></span>
+    </div>
+    <div id="securityQuickInfo"></div>
+  </div>
+
+  <div class="status-bar">
+    <div>
+      <span class="badge" id="modeBadge">وضع الطالب (عرض وبحث فقط — بدون تعديل أو درجات)</span>
+      <span id="countsSummary" style="margin-right:10px; color:var(--muted);"></span>
+    </div>
+    <div class="filter-controls">
+      <div class="filter-group">
+        <label for="schoolFilterSelect" style="color:var(--muted);">المدرسة:</label>
+        <select id="schoolFilterSelect" onchange="onSchoolFilterChange(this.value)"></select>
+      </div>
+      <div class="filter-group">
+        <label for="groupSelect" style="color:var(--muted);">مجموعات المدرسة:</label>
+        <select id="groupSelect" onchange="onGroupChange(this.value)"></select>
+        <button type="button" class="btn-violet" id="inlineAddGroupBtn" style="display:none; padding:6px 10px; font-size:0.82rem;" onclick="addGroupToSelectedSchool()">+ مجموعة جديدة</button>
+        <button type="button" class="btn-rose" id="inlineDeleteGroupBtn" style="display:none; padding:6px 10px; font-size:0.82rem;" onclick="deleteCurrentGroup()">حذف المجموعة</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid">
+    <div>
+      <div class="card">
+        <h2>تنقل المجموعة والبحث الفوري عن الطلاب</h2>
+        <div class="nav-box">
+          <div class="nav-row">
+            <div class="nav-buttons">
+              <button id="btnFirst" onclick="navigateGroup('first')">⏮ الأول</button>
+              <button id="btnPrev" onclick="navigateGroup('prev')">◀ السابق</button>
+              <button id="btnNext" onclick="navigateGroup('next')">التالي ▶</button>
+              <button id="btnLast" onclick="navigateGroup('last')">الأخير ⏭</button>
+            </div>
+            <span class="pos-indicator" id="groupPositionLabel">طالب 0 من 0</span>
+          </div>
+
+          <div class="nav-row">
+            <div class="search-wrap">
+              <input
+                type="text"
+                id="studentSearchInput"
+                placeholder="ابحث عن طالب بالاسم أو بجزء من الاسم أو بدايته..."
+                oninput="renderSearchResults()"
+                onfocus="renderSearchResults()"
+              />
+              <div class="search-results" id="searchResultsBox" style="display:none;"></div>
+            </div>
+            <select id="matchModeSelect" onchange="renderSearchResults()" title="طريقة المطابقة">
+              <option value="contains">جزء من الاسم (يحتوي)</option>
+              <option value="starts">من بداية الاسم (يبدأ بـ)</option>
+            </select>
+            <select id="searchScopeSelect" onchange="renderSearchResults()" title="نطاق البحث">
+              <option value="current">المجموعة المختارة فقط</option>
+              <option value="all">جميع مجموعات المدرسة</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="group-students-strip">
+          <div class="group-students-header">
+            <div>
+              <span id="groupStudentsTitle">طلاب المجموعة المختارة</span>
+              <span id="groupStudentsCountBadge" class="badge" style="margin-right:6px;">0 طالب</span>
+            </div>
+            <button type="button" class="btn-emerald" id="inlineAddStudentBtn" style="display:none; padding:5px 10px; font-size:0.8rem;" onclick="addStudentRecord()">+ إضافة طالب للمجموعة</button>
+          </div>
+          <div class="student-pills" id="groupStudentsPills"></div>
+        </div>
+
+        <h2>بطاقة تعريف الباحث والمجموعة</h2>
+        <div class="row-2">
+          <div class="field">
+            <label>اسم المجموعة البحثية</label>
+            <input type="text" id="fieldGroup" oninput="updateCurrentField('group', this.value)" />
+          </div>
+          <div class="field">
+            <label>المدرسة (السجل الموحد)</label>
+            <select id="fieldSchool" onchange="onSchoolFilterChange(this.value)"></select>
+          </div>
+        </div>
+        <div class="row-2">
+          <div class="field">
+            <label>اسم الطالب الباحث</label>
+            <input type="text" id="fieldStudent" oninput="updateCurrentField('student', this.value)" />
+          </div>
+          <div class="field">
+            <label>الفصل الدراسي</label>
+            <input type="text" id="fieldClass" oninput="updateCurrentField('className', this.value)" />
+          </div>
+        </div>
+        <div class="field">
+          <label>السؤال البحثي الفرعي والمنهجية</label>
+          <input type="text" id="fieldTopic" oninput="updateCurrentField('topic', this.value)" />
+        </div>
+        <div class="field">
+          <label>رابط موقع الويب الخاص بالسؤال الفرعي (URL)</label>
+          <input type="url" id="fieldUrl" oninput="updateCurrentField('url', this.value)" />
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>توثيق المراحل الست وإقرار الذكاء الاصطناعي</h2>
+        <div class="field">
+          <label>ملخص المراحل الست (الخطة، جمع المادة، التنفيذ، التحليل والنتائج، المنتج النهائي، العرض والتأمل)</label>
+          <textarea rows="4" id="fieldStages" oninput="updateCurrentField('stagesNotes', this.value)"></textarea>
+        </div>
+        <div class="row-2">
+          <div class="field">
+            <label>نسبة مشاركة الذكاء الاصطناعي (%)</label>
+            <input type="number" min="0" max="100" id="fieldAiPct" oninput="updateCurrentField('aiPct', Number(this.value || 0))" />
+          </div>
+          <div class="field">
+            <label>بيان الإقرار والشفافية الأكاديمية</label>
+            <input type="text" id="fieldAiDisclosure" oninput="updateCurrentField('aiDisclosure', this.value)" />
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div class="card" id="evaluationCard">
+        <h2>تقييم المشروع البحثي (من 15 درجة)</h2>
+        <div id="studentGradesNotice" class="hint-text" style="display:none; margin-bottom:10px; color:#7dd3fc;">
+          عرض الدرجات متاح للطالب لمعرفة نتيجته فقط؛ التعديل ووضع الدرجات مخصص للمعلم المشرف.
+        </div>
+        <div class="score-box" style="margin-bottom:14px;">
+          <div style="color:var(--muted); font-size:0.85rem;">الدرجة الإجمالية للطالب</div>
+          <div class="score-num" id="totalScoreDisplay">0 / 15</div>
+        </div>
+        <div id="criteriaList"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal: إدارة المدارس الموحدة -->
+<div class="modal-backdrop" id="schoolsModal">
+  <div class="modal">
+    <div class="modal-header">
+      <h3>إدارة السجل الموحد للمدارس</h3>
+      <button onclick="closeSchoolsModal()">إغلاق</button>
+    </div>
+    <div class="field">
+      <label>إضافة مدرسة جديدة للسجل الموحد</label>
+      <div style="display:flex; gap:8px;">
+        <input type="text" id="newSchoolName" placeholder="اكتب اسم المدرسة بدقة..." />
+        <button class="btn-emerald" onclick="addSchoolToRegistry()">إضافة</button>
+      </div>
+    </div>
+    <div id="schoolsListContainer"></div>
+  </div>
+</div>
+
+<!-- Modal: مصادقة ورمز المعلم -->
+<div class="modal-backdrop" id="securityModal">
+  <div class="modal">
+    <div class="modal-header">
+      <h3>إعدادات الأمان والمصادقة لوضع المعلم</h3>
+      <button onclick="closeSecurityModal()">إغلاق</button>
+    </div>
+    <div class="field">
+      <label>رمز المعلم الأساسي (PIN)</label>
+      <input type="password" id="secPinInput" placeholder="أدخل رمزًا سريًا جديدًا (4 أرقام أو أكثر)" />
+    </div>
+    <div class="field">
+      <label>سؤال أو عبارة تأكيد إضافية (عامل أمان ثانٍ عند التفعيل)</label>
+      <input type="text" id="secChallengePromptInput" placeholder="مثال: اسم إدارتي التعليمية" />
+    </div>
+    <div class="field">
+      <label>إجابة التحقق الإضافي (تُحفظ مشفّرة SHA-256)</label>
+      <input type="password" id="secChallengeAnswerInput" placeholder="اكتب الإجابة السرية للتحقق الإضافي" />
+    </div>
+    <div class="field">
+      <label style="display:flex; align-items:center; gap:8px; cursor:pointer; color:var(--ink);">
+        <input type="checkbox" id="secRequireSecondFactor" style="width:auto;" />
+        <span>إلزام التحقق الإضافي عند كل تفعيل لوضع المعلم</span>
+      </label>
+      <div class="hint-text">
+        ملاحظة أمنية: يتم تخزين تجزئة (SHA-256) لرمز المعلم وعبارة التحقق الإضافي ولا تُحفظ كنص مكشوف. كما يُنصح بتفعيل التحقق بخطوتين (2FA) على حساب الاستضافة.
+      </div>
+    </div>
+    <div style="display:flex; justify-content:flex-end; gap:8px; margin-top:16px;">
+      <button onclick="closeSecurityModal()">إلغاء</button>
+      <button class="btn-gold" onclick="saveSecuritySettings()">حفظ إعدادات الأمان</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal: تأكيد حذف المجموعة -->
+<div class="modal-backdrop" id="deleteGroupModal">
+  <div class="modal">
+    <div class="modal-header">
+      <h3>تأكيد حذف المجموعة الحالية</h3>
+      <button onclick="closeDeleteGroupModal()">إغلاق</button>
+    </div>
+    <p id="deleteGroupConfirmText" style="margin:0 0 18px; line-height:1.75;"></p>
+    <div style="display:flex; justify-content:flex-end; gap:10px;">
+      <button type="button" onclick="closeDeleteGroupModal()">لا (إلغاء)</button>
+      <button type="button" class="btn-rose" onclick="confirmDeleteCurrentGroup()">نعم (تأكيد الحذف)</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toastBox"></div>
+
+<script>
+const DEFAULT_PIN = "3247";
+const STORAGE_KEY = "damnhour_research_portal_v8";
+
+const CRITERIA_DEFS = [
+  { id: "plan", label: "1. وضوح خطة البحث والسؤال الفرعي", max: 2.5 },
+  { id: "research", label: "2. جمع المادة العلمية ودقة المصادر", max: 2.5 },
+  { id: "execution", label: "3. تنفيذ المشروع وتكامل المراحل الست", max: 2.5 },
+  { id: "web", label: "4. جودة موقع الويب التفاعلي والمنتج", max: 2.5 },
+  { id: "analysis", label: "5. التحليل واستخراج النتائج والتوصيات", max: 2.5 },
+  { id: "ethics", label: "6. الأمانة العلمية وإقرار الذكاء الاصطناعي والعرض", max: 2.5 }
+];
+
+async function sha256Hex(text) {
+  const clean = (text ?? "").toString();
+  if (window.crypto && window.crypto.subtle) {
+    const buf = new TextEncoder().encode(clean);
+    const hashBuf = await window.crypto.subtle.digest("SHA-256", buf);
+    return Array.from(new Uint8Array(hashBuf)).map(b => b.toString(16).padStart(2, "0")).join("");
+  }
+  let h = 2166136261;
+  for (let i = 0; i < clean.length; i++) {
+    h ^= clean.charCodeAt(i);
+    h = Math.imul(h, 16777619);
+  }
+  return "fallback_" + (h >>> 0).toString(16);
+}
+
+function createDefaultSecurity() {
+  return {
+    pinHash: null,
+    requireSecondFactor: false,
+    challengePrompt: "كلمة السر الإضافية للمشرف",
+    challengeAnswerHash: null
+  };
+}
+
+function createEmptyScores() {
+  return { plan: 0, research: 0, execution: 0, web: 0, analysis: 0, ethics: 0 };
+}
+
+function createDefaultState() {
+  return {
+    security: createDefaultSecurity(),
+    schools: [
+      "مدرسة إسماعيل الحبروك الرسمية لغات",
+      "مدرسة دمنهور الثانوية العسكرية"
+    ],
+    schoolGroupsMap: {
+      "مدرسة إسماعيل الحبروك الرسمية لغات": ["المجموعة رقم (1)", "المجموعة رقم (2)"],
+      "مدرسة دمنهور الثانوية العسكرية": []
+    },
+    records: [
+      {
+        id: "rec-1",
+        group: "المجموعة رقم (1)",
+        school: "مدرسة إسماعيل الحبروك الرسمية لغات",
+        student: "ياسر محمد محمد أحمد",
+        className: "2/2 ثانوي (بكالوريا)",
+        topic: "أثر الألعاب البرمجية التفاعلية في سرعة استيعاب المفاهيم البرمجية",
+        url: "https://example.edu.eg/group1/yasser",
+        stagesNotes: "تم إعداد خطة البحث وتجميع الدراسات وتصميم نموذج تفاعلي للمراحل الست.",
+        aiPct: 15,
+        aiDisclosure: "استُخدم الذكاء الاصطناعي في تنظيم الأفكار ومراجعة الصياغة اللغوية فقط.",
+        scores: { plan: 2.5, research: 2.0, execution: 2.5, web: 2.5, analysis: 2.0, ethics: 2.5 }
+      },
+      {
+        id: "rec-2",
+        group: "المجموعة رقم (1)",
+        school: "مدرسة إسماعيل الحبروك الرسمية لغات",
+        student: "نور محمد عبد الرازق محمود زيدان",
+        className: "2/2 ثانوي (بكالوريا)",
+        topic: "دور التغذية الراجعة الفورية في تحسين منطق الخوارزميات لدى الطلاب",
+        url: "https://example.edu.eg/group1/nour",
+        stagesNotes: "تم جمع البيانات الميدانية وتحليل نتائج التجربة وبناء صفحة التوثيق.",
+        aiPct: 10,
+        aiDisclosure: "إقرار كامل بشفافية استخدام الأدوات المساعدة مع المراجعة اليدوية الكاملة.",
+        scores: { plan: 2.5, research: 2.5, execution: 2.0, web: 2.0, analysis: 2.5, ethics: 2.5 }
+      },
+      {
+        id: "rec-3",
+        group: "المجموعة رقم (2)",
+        school: "مدرسة إسماعيل الحبروك الرسمية لغات",
+        student: "سلمى محمود حسن عبد العال",
+        className: "2/1 ثانوي (بكالوريا)",
+        topic: "توظيف الذكاء الاصطناعي التوليدي في دعم التعلم الذاتي للبرمجة",
+        url: "https://example.edu.eg/group2/salma",
+        stagesNotes: "استكمال المراحل الأولى والثانية والثالثة وتجهيز عرض النتائج.",
+        aiPct: 20,
+        aiDisclosure: "إفصاح واضح عن حدود الاستعانة بالذكاء الاصطناعي وتوثيق المصادر.",
+        scores: { plan: 2.0, research: 2.0, execution: 2.0, web: 2.0, analysis: 2.0, ethics: 2.0 }
+      }
+    ],
+    activeSchool: "مدرسة إسماعيل الحبروك الرسمية لغات",
+    activeGroup: "المجموعة رقم (1)",
+    currentId: "rec-1"
+  };
+}
+
+function normalizeSchoolGroupsMap(schools, records, rawMap) {
+  const map = {};
+  (schools || []).forEach(s => {
+    const cleanSchool = (s || "").trim();
+    if (cleanSchool) map[cleanSchool] = [];
+  });
+
+  if (rawMap && typeof rawMap === "object") {
+    Object.keys(rawMap).forEach(schoolKey => {
+      const cleanSchool = (schoolKey || "").trim();
+      if (!cleanSchool) return;
+      if (!map[cleanSchool]) map[cleanSchool] = [];
+      const arr = Array.isArray(rawMap[schoolKey]) ? rawMap[schoolKey] : [];
+      arr.forEach(g => {
+        const cleanGroup = (g || "").trim();
+        if (cleanGroup && !map[cleanSchool].includes(cleanGroup)) {
+          map[cleanSchool].push(cleanGroup);
+        }
+      });
+    });
+  }
+
+  (records || []).forEach(r => {
+    const cleanSchool = (r.school || "").trim();
+    const cleanGroup = (r.group || "").trim();
+    const hasStudent = (r.student || "").trim() !== "";
+    if (!cleanSchool) return;
+    if (!map[cleanSchool]) map[cleanSchool] = [];
+    if (cleanGroup && hasStudent && !map[cleanSchool].includes(cleanGroup)) {
+      map[cleanSchool].push(cleanGroup);
+    }
+  });
+
+  return map;
+}
+
+let state = loadState();
+let isTeacherMode = false;
+
+function loadState() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (raw) {
+      const parsed = JSON.parse(raw);
+      if (parsed && Array.isArray(parsed.records)) {
+        const schools = Array.isArray(parsed.schools) && parsed.schools.length
+          ? parsed.schools
+          : ["مدرسة إسماعيل الحبروك الرسمية لغات"];
+        const security = Object.assign(createDefaultSecurity(), parsed.security || {});
+        const schoolGroupsMap = normalizeSchoolGroupsMap(schools, parsed.records, parsed.schoolGroupsMap);
+        const activeSchool = parsed.activeSchool && schools.includes(parsed.activeSchool)
+          ? parsed.activeSchool
+          : schools[0];
+        return {
+          security,
+          schools,
+          schoolGroupsMap,
+          records: parsed.records,
+          activeSchool,
+          activeGroup: parsed.activeGroup || "",
+          currentId: parsed.currentId || null
+        };
+      }
+    }
+  } catch (_) {}
+  return createDefaultState();
+}
+
+function persistToStorage(showMsg = false) {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+  if (showMsg) showToast("تم حفظ البيانات محليًا بنجاح");
+}
+
+function showToast(msg) {
+  const box = document.getElementById("toastBox");
+  box.textContent = msg;
+  box.classList.add("show");
+  clearTimeout(window.__toastTimer);
+  window.__toastTimer = setTimeout(() => box.classList.remove("show"), 2600);
+}
+
+function normalizeArabic(str) {
+  return (str || "")
+    .toString()
+    .toLowerCase()
+    .replace(/[أإآا]/g, "ا")
+    .replace(/ى/g, "ي")
+    .replace(/ة/g, "ه")
+    .replace(/[ً-ٟ]/g, "")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+function getSchoolRecords(schoolName) {
+  const target = (schoolName || "").trim();
+  return state.records.filter(r => (r.school || "").trim() === target && (r.student || "").trim() !== "");
+}
+
+function getSchoolGroups(schoolName) {
+  const target = (schoolName || "").trim();
+  if (!target) return [];
+  const fromMap = Array.isArray(state.schoolGroupsMap[target]) ? [...state.schoolGroupsMap[target]] : [];
+  getSchoolRecords(target).forEach(r => {
+    const g = (r.group || "").trim();
+    if (g && !fromMap.includes(g)) fromMap.push(g);
+  });
+  return fromMap;
+}
+
+function getGroupStudentsInSchool(schoolName, groupName) {
+  const targetSchool = (schoolName || "").trim();
+  const targetGroup = (groupName || "").trim();
+  if (!targetSchool || !targetGroup) return [];
+  return state.records.filter(
+    r => (r.school || "").trim() === targetSchool &&
+         (r.group || "").trim() === targetGroup &&
+         (r.student || "").trim() !== ""
+  );
+}
+
+function getCurrentRecord() {
+  const groupStudents = getGroupStudentsInSchool(state.activeSchool, state.activeGroup);
+  if (groupStudents.length === 0) return null;
+  const found = groupStudents.find(r => r.id === state.currentId);
+  if (found) return found;
+  state.currentId = groupStudents[0].id;
+  return groupStudents[0];
+}
+
+function computeTotalScore(rec) {
+  if (!rec || !rec.scores) return 0;
+  const sum = CRITERIA_DEFS.reduce((acc, c) => acc + (Number(rec.scores[c.id]) || 0), 0);
+  return Math.min(15, Math.round(sum * 10) / 10);
+}
+
+async function verifyPinInput(enteredPin) {
+  const cleanPin = (enteredPin || "").trim();
+  if (!cleanPin) return false;
+  const enteredHash = await sha256Hex(cleanPin);
+  if (state.security && state.security.pinHash) {
+    return enteredHash === state.security.pinHash;
+  }
+  const defaultHash = await sha256Hex(DEFAULT_PIN);
+  return enteredHash === defaultHash;
+}
+
+async function toggleTeacherMode() {
+  if (!isTeacherMode) {
+    const pin = prompt("أدخل رمز المعلم المشرف:");
+    if (pin === null) return;
+    const okPin = await verifyPinInput(pin);
+    if (!okPin) {
+      showToast("رمز المعلم غير صحيح");
+      return;
+    }
+    if (state.security && state.security.requireSecondFactor && state.security.challengeAnswerHash) {
+      const promptLabel = state.security.challengePrompt || "عامل التحقق الإضافي";
+      const ans = prompt(`التحقق الإضافي — ${promptLabel}:`);
+      if (ans === null) return;
+      const ansHash = await sha256Hex(ans.trim());
+      if (ansHash !== state.security.challengeAnswerHash) {
+        showToast("فشل التحقق الإضافي للمصادقة");
+        return;
+      }
+    }
+    isTeacherMode = true;
+    showToast("تم تفعيل وضع المعلم المشرف بنجاح");
+  } else {
+    isTeacherMode = false;
+    closeDeleteGroupModal();
+    closeSchoolsModal();
+    closeSecurityModal();
+    showToast("تم إغلاق وضع المعلم والعودة لوضع الطالب");
+  }
+  syncModeUI();
+}
+
+function syncSecurityStrip() {
+  const pill = document.getElementById("authStatusPill");
+  const summary = document.getElementById("securitySummaryText");
+  const quick = document.getElementById("securityQuickInfo");
+
+  if (!isTeacherMode) {
+    pill.textContent = "وضع الطالب: تنقل وبحث ومعرفة الدرجات فقط";
+    summary.textContent = "الإضافة والحذف والتعديل ووضع الدرجات متاحة للمعلم المشرف فقط.";
+    quick.textContent = "يمكنك التنقل بين المدارس والمجموعات والطلاب والبحث بالاسم.";
+    return;
+  }
+
+  const hasCustomPin = Boolean(state.security && state.security.pinHash);
+  const has2FA = Boolean(state.security && state.security.requireSecondFactor && state.security.challengeAnswerHash);
+
+  pill.textContent = has2FA ? "حماية التعديل: رمز المعلم + تحقق إضافي مفعّل" : "حماية التعديل: رمز المعلم نشط";
+  summary.textContent = hasCustomPin
+    ? "تم تعيين رمز معلم مخصص ومشفّر."
+    : "يُستخدم الرمز الافتراضي (3247) — يُنصح بتغييره من إعدادات الأمان.";
+  quick.textContent = "بيانات التقييم تُدار محليًا وبملفات JSON دون حذف سجلات المدارس الأخرى عند التبديل.";
+}
+
+function syncModeUI() {
+  const badge = document.getElementById("modeBadge");
+  const btn = document.getElementById("toggleModeBtn");
+  const actions = document.getElementById("teacherActions");
+  const inlineAddGroupBtn = document.getElementById("inlineAddGroupBtn");
+  const inlineDeleteGroupBtn = document.getElementById("inlineDeleteGroupBtn");
+  const inlineAddStudentBtn = document.getElementById("inlineAddStudentBtn");
+  const studentGradesNotice = document.getElementById("studentGradesNotice");
+  const hasRecord = Boolean(getCurrentRecord());
+  const hasGroup = Boolean((state.activeGroup || "").trim());
+
+  if (isTeacherMode) {
+    badge.textContent = "وضع المعلم المشرف نشط (إدارة وتعديل وتقييم)";
+    badge.style.background = "rgba(16, 185, 129, 0.2)";
+    badge.style.color = "#6ee7b7";
+    btn.textContent = "إغلاق وضع المعلم";
+    actions.style.display = "inline-flex";
+    if (inlineAddGroupBtn) inlineAddGroupBtn.style.display = "inline-block";
+    if (inlineDeleteGroupBtn) {
+      inlineDeleteGroupBtn.style.display = "inline-block";
+      inlineDeleteGroupBtn.disabled = !hasGroup;
+    }
+    if (inlineAddStudentBtn) {
+      inlineAddStudentBtn.style.display = "inline-block";
+      inlineAddStudentBtn.disabled = !hasGroup;
+    }
+    if (studentGradesNotice) studentGradesNotice.style.display = "none";
+  } else {
+    badge.textContent = "وضع الطالب (عرض وبحث فقط — بدون تعديل أو درجات)";
+    badge.style.background = "var(--gold-soft)";
+    badge.style.color = "var(--gold)";
+    btn.textContent = "تفعيل وضع المعلم المشرف";
+    actions.style.display = "none";
+    if (inlineAddGroupBtn) inlineAddGroupBtn.style.display = "none";
+    if (inlineDeleteGroupBtn) inlineDeleteGroupBtn.style.display = "none";
+    if (inlineAddStudentBtn) inlineAddStudentBtn.style.display = "none";
+    if (studentGradesNotice) studentGradesNotice.style.display = "block";
+  }
+
+  const addStudentBtn = document.getElementById("addStudentBtn");
+  const deleteGroupBtn = document.getElementById("deleteGroupBtn");
+  if (addStudentBtn) addStudentBtn.disabled = !hasGroup;
+  if (deleteGroupBtn) deleteGroupBtn.disabled = !hasGroup;
+
+  const editableIds = [
+    "fieldGroup", "fieldStudent", "fieldClass",
+    "fieldTopic", "fieldUrl", "fieldStages", "fieldAiPct", "fieldAiDisclosure"
+  ];
+  editableIds.forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.disabled = !isTeacherMode || !hasRecord;
+  });
+
+  const fieldSchoolSel = document.getElementById("fieldSchool");
+  if (fieldSchoolSel) {
+    fieldSchoolSel.disabled = !isTeacherMode;
+  }
+
+  document.querySelectorAll(".score-input").forEach(inp => {
+    inp.disabled = !isTeacherMode || !hasRecord;
+  });
+  syncSecurityStrip();
+}
+
+function onSchoolFilterChange(newSchool) {
+  const trimmedSchool = (newSchool || "").trim();
+  if (trimmedSchool && !state.schools.includes(trimmedSchool)) {
+    state.schools.push(trimmedSchool);
+  }
+  if (!state.schoolGroupsMap[trimmedSchool]) {
+    state.schoolGroupsMap[trimmedSchool] = [];
+  }
+  state.activeSchool = trimmedSchool;
+
+  const schoolGroups = getSchoolGroups(trimmedSchool);
+  if (schoolGroups.length > 0) {
+    const firstGroup = schoolGroups[0];
+    const firstGroupStudents = getGroupStudentsInSchool(trimmedSchool, firstGroup);
+    state.activeGroup = firstGroup;
+    state.currentId = firstGroupStudents[0] ? firstGroupStudents[0].id : null;
+    persistToStorage(false);
+    renderAll();
+    if (firstGroupStudents[0]) {
+      showToast(`تم عرض ${firstGroup} والطالب: ${firstGroupStudents[0].student}`);
+    } else {
+      showToast(`تم اختيار ${firstGroup} — لا يوجد طلاب مسجلون بها بعد`);
+    }
+  } else {
+    state.activeGroup = "";
+    state.currentId = null;
+    persistToStorage(false);
+    renderAll();
+    showToast(`لا توجد مجموعات مسجلة في "${trimmedSchool}" حاليًا`);
+  }
+  renderSearchResults();
+}
+
+function onGroupChange(newGroup) {
+  state.activeGroup = (newGroup || "").trim();
+  const groupStudents = getGroupStudentsInSchool(state.activeSchool, state.activeGroup);
+  state.currentId = groupStudents.length > 0 ? groupStudents[0].id : null;
+  persistToStorage(false);
+  renderAll();
+  renderSearchResults();
+}
+
+function addGroupToSelectedSchool() {
+  if (!isTeacherMode) {
+    showToast("هذه العملية متاحة للمعلم المشرف فقط");
+    return;
+  }
+  const targetSchool = state.activeSchool || state.schools[0] || "مدرسة إسماعيل الحبروك الرسمية لغات";
+  if (!state.schoolGroupsMap[targetSchool]) {
+    state.schoolGroupsMap[targetSchool] = [];
+  }
+  const existingGroups = getSchoolGroups(targetSchool);
+  const suggestedName = `المجموعة رقم (${existingGroups.length + 1})`;
+  const enteredName = prompt(`أدخل اسم المجموعة الجديدة داخل (${targetSchool}):`, suggestedName);
+  if (enteredName === null) return;
+  const cleanGroup = enteredName.trim();
+  if (!cleanGroup) {
+    showToast("يرجى إدخال اسم صحيح للمجموعة");
+    return;
+  }
+
+  if (!state.schoolGroupsMap[targetSchool].includes(cleanGroup)) {
+    state.schoolGroupsMap[targetSchool].push(cleanGroup);
+  }
+  state.activeSchool = targetSchool;
+  state.activeGroup = cleanGroup;
+  const groupStudents = getGroupStudentsInSchool(targetSchool, cleanGroup);
+  state.currentId = groupStudents[0] ? groupStudents[0].id : null;
+  persistToStorage(true);
+  renderAll();
+  showToast(`تمت إضافة "${cleanGroup}" إلى ${targetSchool}`);
+}
+
+function deleteCurrentGroup() {
+  if (!isTeacherMode) {
+    showToast("هذه العملية متاحة للمعلم المشرف فقط");
+    return;
+  }
+  const targetSchool = (state.activeSchool || "").trim();
+  const targetGroup = (state.activeGroup || "").trim();
+  if (!targetSchool || !targetGroup) {
+    showToast("لا توجد مجموعة محددة لحذفها");
+    return;
+  }
+
+  const groupStudents = getGroupStudentsInSchool(targetSchool, targetGroup);
+  const msgEl = document.getElementById("deleteGroupConfirmText");
+  if (groupStudents.length > 0) {
+    msgEl.innerHTML =
+      `تنبيه: المجموعة <strong>«${escapeHtml(targetGroup)}»</strong> في <strong>${escapeHtml(targetSchool)}</strong> تحتوي على <strong>(${groupStudents.length})</strong> طالب/طالبة، وفي حالة الحذف سيتم حذف المجموعة مع جميع الطلاب الموجودين بها.<br/><br/>هل تريد الاستمرار؟`;
+  } else {
+    msgEl.innerHTML =
+      `هل تريد حذف المجموعة <strong>«${escapeHtml(targetGroup)}»</strong> من <strong>${escapeHtml(targetSchool)}</strong>؟<br/><br/>هل تريد الاستمرار؟`;
+  }
+  document.getElementById("deleteGroupModal").classList.add("open");
+}
+
+function closeDeleteGroupModal() {
+  document.getElementById("deleteGroupModal").classList.remove("open");
+}
+
+function confirmDeleteCurrentGroup() {
+  if (!isTeacherMode) return;
+  const targetSchool = (state.activeSchool || "").trim();
+  const targetGroup = (state.activeGroup || "").trim();
+  closeDeleteGroupModal();
+  if (!targetSchool || !targetGroup) return;
+
+  state.records = state.records.filter(
+    r => !((r.school || "").trim() === targetSchool && (r.group || "").trim() === targetGroup)
+  );
+
+  if (Array.isArray(state.schoolGroupsMap[targetSchool])) {
+    state.schoolGroupsMap[targetSchool] = state.schoolGroupsMap[targetSchool].filter(
+      g => (g || "").trim() !== targetGroup
+    );
+  }
+
+  const remainingGroups = getSchoolGroups(targetSchool);
+  if (remainingGroups.length > 0) {
+    state.activeGroup = remainingGroups[0];
+    const nextStudents = getGroupStudentsInSchool(targetSchool, state.activeGroup);
+    state.currentId = nextStudents[0] ? nextStudents[0].id : null;
+  } else {
+    state.activeGroup = "";
+    state.currentId = null;
+  }
+
+  persistToStorage(true);
+  renderAll();
+  showToast(`تم حذف المجموعة "${targetGroup}" وجميع طلابها`);
+}
+
+function selectStudentPill(recordId) {
+  const groupStudents = getGroupStudentsInSchool(state.activeSchool, state.activeGroup);
+  const chosen = groupStudents.find(r => r.id === recordId);
+  if (!chosen) return;
+  state.currentId = chosen.id;
+  persistToStorage(false);
+  renderAll();
+}
+
+function openSecurityModal() {
+  if (!isTeacherMode) return;
+  document.getElementById("secPinInput").value = "";
+  document.getElementById("secChallengePromptInput").value = (state.security && state.security.challengePrompt) || "";
+  document.getElementById("secChallengeAnswerInput").value = "";
+  document.getElementById("secRequireSecondFactor").checked = Boolean(state.security && state.security.requireSecondFactor);
+  document.getElementById("securityModal").classList.add("open");
+}
+
+function closeSecurityModal() {
+  document.getElementById("securityModal").classList.remove("open");
+}
+
+async function saveSecuritySettings() {
+  if (!isTeacherMode) return;
+  const newPin = (document.getElementById("secPinInput").value || "").trim();
+  const promptText = (document.getElementById("secChallengePromptInput").value || "").trim() || "عامل التحقق الإضافي";
+  const newAnswer = (document.getElementById("secChallengeAnswerInput").value || "").trim();
+  const require2FA = document.getElementById("secRequireSecondFactor").checked;
+
+  state.security = Object.assign(createDefaultSecurity(), state.security || {});
+  if (newPin) {
+    if (newPin.length < 4) {
+      showToast("يفضل أن يكون رمز المعلم 4 أحرف أو أرقام على الأقل");
+      return;
+    }
+    state.security.pinHash = await sha256Hex(newPin);
+  }
+  state.security.challengePrompt = promptText;
+  if (newAnswer) {
+    state.security.challengeAnswerHash = await sha256Hex(newAnswer);
+  }
+  if (require2FA && !state.security.challengeAnswerHash) {
+    showToast("أدخل إجابة التحقق الإضافي أولًا لتفعيل التحقق الإضافي");
+    return;
+  }
+  state.security.requireSecondFactor = require2FA;
+
+  persistToStorage(true);
+  closeSecurityModal();
+  syncSecurityStrip();
+}
+
+function renderAll() {
+  if (!state.activeSchool && state.schools.length > 0) {
+    state.activeSchool = state.schools[0];
+  }
+
+  const schoolFilterSel = document.getElementById("schoolFilterSelect");
+  const fieldSchoolSel = document.getElementById("fieldSchool");
+  const schoolOptionsHtml = state.schools
+    .map(s => `<option value="${escapeHtml(s)}" ${s === state.activeSchool ? "selected" : ""}>${escapeHtml(s)}</option>`)
+    .join("");
+  schoolFilterSel.innerHTML = schoolOptionsHtml;
+  fieldSchoolSel.innerHTML = schoolOptionsHtml;
+
+  const schoolGroups = getSchoolGroups(state.activeSchool);
+  if (schoolGroups.length === 0) {
+    state.activeGroup = "";
+    state.currentId = null;
+  } else if (!schoolGroups.includes(state.activeGroup)) {
+    state.activeGroup = schoolGroups[0];
+    const firstList = getGroupStudentsInSchool(state.activeSchool, state.activeGroup);
+    state.currentId = firstList[0] ? firstList[0].id : null;
+  }
+
+  const groupSel = document.getElementById("groupSelect");
+  if (schoolGroups.length === 0) {
+    groupSel.innerHTML = `<option value="">لا توجد مجموعات لهذه المدرسة</option>`;
+    groupSel.disabled = true;
+  } else {
+    groupSel.disabled = false;
+    groupSel.innerHTML = schoolGroups
+      .map(g => `<option value="${escapeHtml(g)}" ${g === state.activeGroup ? "selected" : ""}>${escapeHtml(g)}</option>`)
+      .join("");
+  }
+
+  const groupStudents = getGroupStudentsInSchool(state.activeSchool, state.activeGroup);
+  const currentRec = getCurrentRecord();
+
+  if (currentRec) {
+    document.getElementById("fieldGroup").value = currentRec.group || "";
+    document.getElementById("fieldStudent").value = currentRec.student || "";
+    document.getElementById("fieldClass").value = currentRec.className || "";
+    document.getElementById("fieldTopic").value = currentRec.topic || "";
+    document.getElementById("fieldUrl").value = currentRec.url || "";
+    document.getElementById("fieldStages").value = currentRec.stagesNotes || "";
+    document.getElementById("fieldAiPct").value = currentRec.aiPct ?? 0;
+    document.getElementById("fieldAiDisclosure").value = currentRec.aiDisclosure || "";
+  } else {
+    document.getElementById("fieldGroup").value = state.activeGroup || "";
+    document.getElementById("fieldStudent").value = "";
+    document.getElementById("fieldClass").value = "";
+    document.getElementById("fieldTopic").value = "";
+    document.getElementById("fieldUrl").value = "";
+    document.getElementById("fieldStages").value = "";
+    document.getElementById("fieldAiPct").value = 0;
+    document.getElementById("fieldAiDisclosure").value = "";
+  }
+
+  renderGroupStudentsStrip(groupStudents, currentRec);
+  renderCriteria(currentRec);
+  updateGroupNavigationUI(groupStudents, currentRec);
+
+  const schoolTotalStudents = getSchoolRecords(state.activeSchool).length;
+  document.getElementById("countsSummary").textContent =
+    `طلاب المدرسة: ${schoolTotalStudents} • مجموعات المدرسة: ${schoolGroups.length} • إجمالي السجلات بالنظام: ${state.records.length}`;
+  syncModeUI();
+}
+
+function renderGroupStudentsStrip(groupStudents, currentRec) {
+  const titleEl = document.getElementById("groupStudentsTitle");
+  const badgeEl = document.getElementById("groupStudentsCountBadge");
+  const pillsEl = document.getElementById("groupStudentsPills");
+
+  const gLabel = state.activeGroup || "لا توجد مجموعة مختارة";
+  titleEl.textContent = `الطلاب المعروضون في (${gLabel})`;
+  badgeEl.textContent = `${groupStudents.length} طالب`;
+
+  if (groupStudents.length === 0) {
+    pillsEl.innerHTML = `<span style="color:var(--muted); font-size:0.85rem;">لا يوجد طلاب معروضون في هذه المجموعة.</span>`;
+    return;
+  }
+
+  pillsEl.innerHTML = groupStudents.map((st, idx) => {
+    const activeClass = currentRec && currentRec.id === st.id ? "student-pill active" : "student-pill";
+    return `<button type="button" class="${activeClass}" onclick="selectStudentPill('${st.id}')">${idx + 1}. ${escapeHtml(st.student)}</button>`;
+  }).join("");
+}
+
+function renderCriteria(rec) {
+  const wrap = document.getElementById("criteriaList");
+  const scores = (rec && rec.scores) || {};
+  wrap.innerHTML = CRITERIA_DEFS.map(c => {
+    const val = rec ? (scores[c.id] ?? 0) : 0;
+    return `
+      <div class="criteria-item">
+        <span>${c.label} <small style="color:var(--muted);">(${c.max})</small></span>
+        <input
+          type="number"
+          class="score-input"
+          step="0.5"
+          min="0"
+          max="${c.max}"
+          value="${val}"
+          onchange="updateScore('${c.id}', ${c.max}, this.value)"
+        />
+      </div>
+    `;
+  }).join("");
+  document.getElementById("totalScoreDisplay").textContent = `${computeTotalScore(rec)} / 15`;
+}
+
+function updateScore(criterionId, maxScore, rawVal) {
+  if (!isTeacherMode) {
+    showToast("وضع الدرجات متاح للمعلم المشرف فقط");
+    renderCriteria(getCurrentRecord());
+    syncModeUI();
+    return;
+  }
+  const rec = getCurrentRecord();
+  if (!rec) return;
+  let num = parseFloat(rawVal);
+  if (isNaN(num)) num = 0;
+  num = Math.max(0, Math.min(maxScore, Math.round(num * 2) / 2));
+  rec.scores = rec.scores || {};
+  rec.scores[criterionId] = num;
+  document.getElementById("totalScoreDisplay").textContent = `${computeTotalScore(rec)} / 15`;
+  persistToStorage(false);
+}
+
+function updateGroupNavigationUI(groupStudents, currentRec) {
+  const groupLabel = state.activeGroup || "بدون مجموعة";
+  const total = groupStudents.length;
+  const idx = currentRec ? groupStudents.findIndex(r => r.id === currentRec.id) : -1;
+
+  const posLabel = document.getElementById("groupPositionLabel");
+  if (total === 0 || idx === -1) {
+    posLabel.textContent = `طالب 0 من 0 في ${groupLabel}`;
+  } else {
+    posLabel.textContent = `طالب ${idx + 1} من ${total} في ${groupLabel}`;
+  }
+
+  document.getElementById("btnFirst").disabled = idx <= 0;
+  document.getElementById("btnPrev").disabled = idx <= 0;
+  document.getElementById("btnNext").disabled = idx === -1 || idx >= total - 1;
+  document.getElementById("btnLast").disabled = idx === -1 || idx >= total - 1;
+}
+
+function navigateGroup(action) {
+  const groupStudents = getGroupStudentsInSchool(state.activeSchool, state.activeGroup);
+  if (groupStudents.length === 0) return;
+  let idx = groupStudents.findIndex(r => r.id === state.currentId);
+  if (idx === -1) idx = 0;
+
+  let targetIdx = idx;
+  if (action === "first") targetIdx = 0;
+  else if (action === "prev") targetIdx = Math.max(0, idx - 1);
+  else if (action === "next") targetIdx = Math.min(groupStudents.length - 1, idx + 1);
+  else if (action === "last") targetIdx = groupStudents.length - 1;
+
+  state.currentId = groupStudents[targetIdx].id;
+  persistToStorage(false);
+  renderAll();
+}
+
+function renderSearchResults() {
+  const qRaw = document.getElementById("studentSearchInput").value || "";
+  const qNorm = normalizeArabic(qRaw);
+  const box = document.getElementById("searchResultsBox");
+  if (!qNorm) {
+    box.style.display = "none";
+    box.innerHTML = "";
+    return;
+  }
+
+  const mode = document.getElementById("matchModeSelect").value;
+  const scope = document.getElementById("searchScopeSelect").value;
+  const pool = scope === "current"
+    ? getGroupStudentsInSchool(state.activeSchool, state.activeGroup)
+    : getSchoolRecords(state.activeSchool);
+
+  const matches = pool.filter(r => {
+    const nameNorm = normalizeArabic(r.student || "");
+    if (!nameNorm) return false;
+    return mode === "starts" ? nameNorm.startsWith(qNorm) : nameNorm.includes(qNorm);
+  });
+
+  box.style.display = "block";
+  if (matches.length === 0) {
+    box.innerHTML = `<div class="search-empty">لا توجد نتائج مطابقة للبحث في ${scope === "current" ? "المجموعة المختارة" : "مجموعات المدرسة المختارة"}.</div>`;
+    return;
+  }
+
+  box.innerHTML = matches.map(m => `
+    <div class="search-item" onclick="selectSearchStudent('${m.id}')">
+      <span><strong>${escapeHtml(m.student || "بدون اسم")}</strong> <small style="color:var(--muted);">(${escapeHtml(m.className || "")})</small></span>
+      <span class="badge">${escapeHtml(m.group || "")} • ${computeTotalScore(m)}/15</span>
+    </div>
+  `).join("");
+}
+
+function selectSearchStudent(recordId) {
+  const rec = state.records.find(r => r.id === recordId);
+  if (!rec) return;
+  state.activeSchool = (rec.school || "").trim() || state.activeSchool;
+  state.activeGroup = (rec.group || "").trim() || state.activeGroup;
+  state.currentId = rec.id;
+  document.getElementById("searchResultsBox").style.display = "none";
+  document.getElementById("studentSearchInput").value = rec.student || "";
+  persistToStorage(false);
+  renderAll();
+}
+
+document.addEventListener("click", (e) => {
+  const wrap = document.querySelector(".search-wrap");
+  if (wrap && !wrap.contains(e.target)) {
+    document.getElementById("searchResultsBox").style.display = "none";
+  }
+});
+
+function updateCurrentField(key, value) {
+  if (!isTeacherMode) {
+    showToast("التعديل متاح للمعلم المشرف فقط");
+    renderAll();
+    return;
+  }
+  const rec = getCurrentRecord();
+  if (!rec) return;
+  rec[key] = value;
+  if (key === "group") {
+    const trimmed = (value || "").trim();
+    if (trimmed) {
+      const schoolKey = (rec.school || state.activeSchool || "").trim();
+      if (schoolKey) {
+        if (!state.schoolGroupsMap[schoolKey]) state.schoolGroupsMap[schoolKey] = [];
+        if (!state.schoolGroupsMap[schoolKey].includes(trimmed)) {
+          state.schoolGroupsMap[schoolKey].push(trimmed);
+        }
+      }
+      state.activeGroup = trimmed;
+    }
+  }
+  persistToStorage(false);
+  renderAll();
+}
+
+function addStudentRecord() {
+  if (!isTeacherMode) {
+    showToast("هذه العملية متاحة للمعلم المشرف فقط");
+    return;
+  }
+  const targetSchool = state.activeSchool || state.schools[0] || "مدرسة إسماعيل الحبروك الرسمية لغات";
+  const schoolGroups = getSchoolGroups(targetSchool);
+  const targetGroup = (state.activeGroup || "").trim() || schoolGroups[0] || "";
+
+  if (!targetGroup) {
+    showToast("أضف مجموعة أولًا داخل المدرسة المختارة ثم أضف الطالب");
+    return;
+  }
+
+  if (!state.schoolGroupsMap[targetSchool]) state.schoolGroupsMap[targetSchool] = [];
+  if (!state.schoolGroupsMap[targetSchool].includes(targetGroup)) {
+    state.schoolGroupsMap[targetSchool].push(targetGroup);
+  }
+
+  const existingInGroup = getGroupStudentsInSchool(targetSchool, targetGroup);
+  const templateRec = existingInGroup[0] || null;
+  const newId = "rec-" + Date.now();
+
+  const newRec = {
+    id: newId,
+    group: targetGroup,
+    school: targetSchool,
+    student: "طالب جديد",
+    className: (templateRec && templateRec.className) || "2/2 ثانوي (بكالوريا)",
+    topic: "",
+    url: "",
+    stagesNotes: "",
+    aiPct: 0,
+    aiDisclosure: "",
+    scores: createEmptyScores()
+  };
+
+  state.records.push(newRec);
+  state.activeSchool = targetSchool;
+  state.activeGroup = targetGroup;
+  state.currentId = newId;
+  persistToStorage(true);
+  renderAll();
+  showToast(`تمت إضافة طالب جديد داخل (${targetGroup})`);
+}
+
+function deleteCurrentRecord() {
+  if (!isTeacherMode) {
+    showToast("هذه العملية متاحة للمعلم المشرف فقط");
+    return;
+  }
+  const rec = getCurrentRecord();
+  if (!rec) {
+    showToast("لا يوجد سجل حالي لحذفه");
+    return;
+  }
+  if (!confirm(`هل تريد حذف سجل الطالب: "${rec.student}"؟`)) return;
+  state.records = state.records.filter(r => r.id !== rec.id);
+
+  const remainingInGroup = getGroupStudentsInSchool(state.activeSchool, state.activeGroup);
+  if (remainingInGroup.length > 0) {
+    state.currentId = remainingInGroup[0].id;
+  } else {
+    state.currentId = null;
+  }
+  persistToStorage(true);
+  renderAll();
+}
+
+function openSchoolsModal() {
+  if (!isTeacherMode) return;
+  renderSchoolsModalList();
+  document.getElementById("schoolsModal").classList.add("open");
+}
+
+function closeSchoolsModal() {
+  document.getElementById("schoolsModal").classList.remove("open");
+  renderAll();
+}
+
+function renderSchoolsModalList() {
+  const container = document.getElementById("schoolsListContainer");
+  container.innerHTML = state.schools.map((school, idx) => `
+    <div class="school-row">
+      <input type="text" value="${escapeHtml(school)}" onchange="renameSchool(${idx}, this.value)" />
+      <button class="btn-rose" onclick="deleteSchool(${idx})">حذف</button>
+    </div>
+  `).join("");
+}
+
+function addSchoolToRegistry() {
+  if (!isTeacherMode) return;
+  const inp = document.getElementById("newSchoolName");
+  const name = (inp.value || "").trim();
+  if (!name) return;
+  if (!state.schools.includes(name)) {
+    state.schools.push(name);
+    if (!state.schoolGroupsMap[name]) state.schoolGroupsMap[name] = [];
+    persistToStorage(true);
+  }
+  inp.value = "";
+  renderSchoolsModalList();
+}
+
+function renameSchool(idx, newName) {
+  if (!isTeacherMode) return;
+  const trimmed = (newName || "").trim();
+  if (!trimmed) return;
+  const oldName = state.schools[idx];
+  state.schools[idx] = trimmed;
+  if (state.schoolGroupsMap[oldName]) {
+    state.schoolGroupsMap[trimmed] = state.schoolGroupsMap[oldName];
+    delete state.schoolGroupsMap[oldName];
+  }
+  state.records.forEach(r => {
+    if (r.school === oldName) r.school = trimmed;
+  });
+  if (state.activeSchool === oldName) state.activeSchool = trimmed;
+  persistToStorage(true);
+  renderSchoolsModalList();
+}
+
+function deleteSchool(idx) {
+  if (!isTeacherMode) return;
+  if (state.schools.length <= 1) {
+    showToast("لا يمكن حذف آخر مدرسة في السجل");
+    return;
+  }
+  const target = state.schools[idx];
+  const fallback = state.schools.find((_, i) => i !== idx) || "مدرسة إسماعيل الحبروك الرسمية لغات";
+  state.schools.splice(idx, 1);
+  delete state.schoolGroupsMap[target];
+  state.records.forEach(r => {
+    if (r.school === target) r.school = fallback;
+  });
+  if (state.activeSchool === target) state.activeSchool = fallback;
+  persistToStorage(true);
+  renderSchoolsModalList();
+}
+
+function saveCurrentState() {
+  if (!isTeacherMode) return;
+  persistToStorage(true);
+}
+
+function exportJson() {
+  if (!isTeacherMode) return;
+  const blob = new Blob([JSON.stringify(state, null, 2)], { type: "application/json;charset=utf-8" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "research-groups-data.json";
+  a.click();
+  URL.revokeObjectURL(url);
+  showToast("تم تصدير ملف JSON");
+}
+
+function importJson(event) {
+  if (!isTeacherMode) return;
+  const file = event.target.files && event.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = () => {
+    try {
+      const parsed = JSON.parse(reader.result);
+      if (!parsed || !Array.isArray(parsed.records)) {
+        showToast("ملف JSON غير صالح");
+        return;
+      }
+      const schools = Array.isArray(parsed.schools) && parsed.schools.length
+        ? parsed.schools
+        : ["مدرسة إسماعيل الحبروك الرسمية لغات"];
+      const schoolGroupsMap = normalizeSchoolGroupsMap(schools, parsed.records, parsed.schoolGroupsMap);
+      const activeSchool = parsed.activeSchool && schools.includes(parsed.activeSchool)
+        ? parsed.activeSchool
+        : schools[0];
+      const schoolGroups = schoolGroupsMap[activeSchool] || [];
+      const activeGroup = (parsed.activeGroup && schoolGroups.includes(parsed.activeGroup))
+        ? parsed.activeGroup
+        : (schoolGroups[0] || "");
+      const groupList = parsed.records.filter(
+        r => (r.school || "").trim() === activeSchool.trim() && (r.group || "").trim() === activeGroup.trim()
+      );
+      const currentId = (groupList.find(r => r.id === parsed.currentId) || groupList[0] || {}).id || null;
+
+      state = {
+        security: Object.assign(createDefaultSecurity(), parsed.security || {}),
+        schools,
+        schoolGroupsMap,
+        records: parsed.records,
+        activeSchool,
+        activeGroup,
+        currentId
+      };
+      persistToStorage(true);
+      renderAll();
+    } catch (_) {
+      showToast("تعذر قراءة ملف JSON");
+    }
+  };
+  reader.readAsText(file, "utf-8");
+  event.target.value = "";
+}
+
+function generatePdfReport() {
+  const rec = getCurrentRecord();
+  if (!rec) {
+    showToast("لا توجد بيانات طالب لطباعة تقرير");
+    return;
+  }
+  const total = computeTotalScore(rec);
+  const rowsHtml = CRITERIA_DEFS.map(c =>
+    `<tr><td>${c.label}</td><td>${(rec.scores && rec.scores[c.id]) ?? 0} / ${c.max}</td></tr>`
+  ).join("");
+
+  const reportHtml = `<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8" />
+<title>تقرير المشروع البحثي — ${escapeHtml(rec.student || "")}</title>
+<style>
+  body { font-family: Tahoma, Arial, sans-serif; margin: 28px; color: #111827; }
+  h1 { margin: 0 0 6px; font-size: 20px; }
+  .meta { color: #4b5563; margin-bottom: 18px; font-size: 13px; }
+  table { width: 100%; border-collapse: collapse; margin: 14px 0; }
+  th, td { border: 1px solid #cbd5e1; padding: 8px 10px; text-align: right; font-size: 13px; }
+  th { background: #f1f5f9; }
+  .box { border: 1px solid #cbd5e1; border-radius: 8px; padding: 12px; margin-bottom: 12px; background: #f8fafc; }
+  .total { font-size: 16px; font-weight: bold; color: #0f172a; }
+</style>
+</head>
+<body>
+  <h1>تقرير تقييم المشروع البحثي — الصف الثاني الثانوي (بكالوريا)</h1>
+  <div class="meta">مادة الكمبيوتر وتكنولوجيا المعلومات • التقييم الكلي: <span class="total">${total} من 15 درجة</span></div>
+  <div class="box">
+    <strong>الطالب الباحث:</strong> ${escapeHtml(rec.student || "")}<br/>
+    <strong>المجموعة البحثية:</strong> ${escapeHtml(rec.group || "")} — <strong>الفصل:</strong> ${escapeHtml(rec.className || "")}<br/>
+    <strong>المدرسة:</strong> ${escapeHtml(rec.school || "")}<br/>
+    <strong>السؤال البحثي الفرعي:</strong> ${escapeHtml(rec.topic || "")}<br/>
+    <strong>رابط الموقع:</strong> ${escapeHtml(rec.url || "")}
+  </div>
+  <div class="box">
+    <strong>ملخص المراحل الست:</strong><br/>${escapeHtml(rec.stagesNotes || "")}
+  </div>
+  <div class="box">
+    <strong>إقرار الذكاء الاصطناعي (${rec.aiPct ?? 0}%):</strong><br/>${escapeHtml(rec.aiDisclosure || "")}
+  </div>
+  <table>
+    <thead><tr><th>معيار التقييم</th><th>الدرجة</th></tr></thead>
+    <tbody>${rowsHtml}</tbody>
+  </table>
+  <script>window.print();<\/script>
+</body>
+</html>`;
+
+  const blob = new Blob([reportHtml], { type: "text/html;charset=utf-8" });
+  const url = URL.createObjectURL(blob);
+  const win = window.open(url, "_blank");
+  if (!win) {
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `report-${(rec.student || "student").replace(/\s+/g, "-")}.html`;
+    a.click();
+  }
+  setTimeout(() => URL.revokeObjectURL(url), 10000);
+}
+
+function escapeHtml(str) {
+  return (str || "").toString()
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
+}
+
+renderAll();
+</script>
+</body>
+</html>
